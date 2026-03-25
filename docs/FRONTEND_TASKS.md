@@ -20,13 +20,13 @@
 - [x] Build wallet page
 - [x] Build submission upload page
 
-## Phase 3 — UX Enhancements
-- [ ] Add responsive mobile navigation
-- [ ] Add filter/sort UI for dare feed
-- [ ] Add category tabs/chips
-- [ ] Add success/error/toast UI
-- [ ] Add empty states for feed/profile/wallet
-- [ ] Add basic skeleton loaders
+## Phase 3 — UX Enhancements ✅
+- [x] Add responsive mobile navigation
+- [x] Add filter/sort UI for dare feed
+- [x] Add category tabs/chips
+- [x] Add success/error/toast UI
+- [x] Add empty states for feed/profile/wallet
+- [x] Add basic skeleton loaders
 
 ## Phase 4 — Integration Preparation
 - [ ] Add TanStack Query setup

@@ -4,6 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 
+const navLinks = [
+  { href: "/feed", label: "Browse Dares" },
+  { href: "/create", label: "Create a Dare" },
+  { href: "/profile", label: "Profile" },
+  { href: "/wallet", label: "Wallet" },
+];
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -18,12 +25,11 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-gray-600">
-          <Link href="/feed" className="hover:text-gray-900 transition-colors">
-            Browse Dares
-          </Link>
-          <Link href="/create" className="hover:text-gray-900 transition-colors">
-            Create a Dare
-          </Link>
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="hover:text-gray-900 transition-colors">
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Desktop actions */}
@@ -49,20 +55,16 @@ export default function Header() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 flex flex-col gap-4">
-          <Link
-            href="/feed"
-            className="text-sm font-medium text-gray-700 hover:text-violet-600 transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            Browse Dares
-          </Link>
-          <Link
-            href="/create"
-            className="text-sm font-medium text-gray-700 hover:text-violet-600 transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            Create a Dare
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-medium text-gray-700 hover:text-violet-600 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
           <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
             <Button variant="outline" size="sm" className="w-full">Sign In</Button>
             <Button variant="primary" size="sm" className="w-full">Get Started</Button>

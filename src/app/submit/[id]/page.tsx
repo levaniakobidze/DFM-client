@@ -7,6 +7,7 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { useToast } from "@/context/ToastContext";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -14,6 +15,7 @@ interface Props {
 
 export default function SubmitPage({ params }: Props) {
   const { id } = use(params);
+  const { showToast } = useToast();
   const dare = mockDares.find((d) => d.id === id);
   const [submitted, setSubmitted] = useState(false);
 
@@ -59,6 +61,7 @@ export default function SubmitPage({ params }: Props) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          showToast("Proof submitted! Awaiting review.", "info");
           setSubmitted(true);
         }}
         className="space-y-4"

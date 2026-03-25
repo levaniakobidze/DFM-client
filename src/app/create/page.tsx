@@ -5,10 +5,12 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { useToast } from "@/context/ToastContext";
 
 const categories = ["Fun", "Social", "Creative", "Video", "Public"];
 
 export default function CreateDarePage() {
+  const { showToast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -34,7 +36,7 @@ export default function CreateDarePage() {
         className="mb-8"
       />
 
-      <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-5">
+      <form onSubmit={(e) => { e.preventDefault(); showToast("Dare posted successfully!"); setSubmitted(true); }} className="space-y-5">
 
         {/* Basic info */}
         <Card>
