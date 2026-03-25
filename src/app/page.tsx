@@ -1,65 +1,116 @@
-import Image from "next/image";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
+import SectionTitle from "@/components/ui/SectionTitle";
+import EmptyState from "@/components/ui/EmptyState";
+import { CardSkeleton } from "@/components/ui/Skeleton";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-6xl mx-auto px-4 py-12 space-y-14">
+
+      <SectionTitle
+        title="UI Components — Phase 1"
+        subtitle="Foundation components. This page will be replaced by the landing page in Phase 2."
+      />
+
+      {/* Buttons */}
+      <section className="space-y-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Buttons</p>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="primary">Accept Dare</Button>
+          <Button variant="secondary">Browse</Button>
+          <Button variant="outline">Create Dare</Button>
+          <Button variant="ghost">Sign In</Button>
+          <Button variant="danger">Cancel</Button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="primary" size="lg">Large CTA</Button>
+          <Button variant="primary" size="sm">Small</Button>
+          <Button variant="primary" disabled>Disabled</Button>
         </div>
-      </main>
+      </section>
+
+      {/* Badges */}
+      <section className="space-y-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Badges</p>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="category">Fun</Badge>
+          <Badge variant="category">Social</Badge>
+          <Badge variant="category">Creative</Badge>
+          <Badge variant="category">Video</Badge>
+          <Badge variant="reward">$25.00</Badge>
+          <Badge variant="success">Completed</Badge>
+          <Badge variant="pending">Pending Review</Badge>
+          <Badge variant="danger">Expired</Badge>
+          <Badge>Default</Badge>
+        </div>
+      </section>
+
+      {/* Cards */}
+      <section className="space-y-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Dare Cards</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <Card>
+            <Badge variant="category" className="mb-3">Fun</Badge>
+            <h3 className="font-semibold text-gray-900 mb-1">Eat a spoonful of hot sauce</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Film yourself eating a full teaspoon of your spiciest hot sauce without drinking anything.
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-amber-500">$15.00</span>
+              <Button size="sm">Accept</Button>
+            </div>
+          </Card>
+
+          <Card>
+            <Badge variant="category" className="mb-3">Social</Badge>
+            <h3 className="font-semibold text-gray-900 mb-1">Compliment 5 strangers</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Record yourself giving genuine compliments to 5 different strangers in a public place.
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-amber-500">$30.00</span>
+              <Button size="sm">Accept</Button>
+            </div>
+          </Card>
+
+          <Card>
+            <Badge variant="category" className="mb-3">Creative</Badge>
+            <h3 className="font-semibold text-gray-900 mb-1">Draw a portrait in 60 seconds</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Draw a recognisable portrait of any person and submit a photo of the final result.
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-amber-500">$10.00</span>
+              <Button size="sm">Accept</Button>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      {/* Skeletons */}
+      <section className="space-y-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Loading Skeletons</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+      </section>
+
+      {/* Empty State */}
+      <section className="space-y-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Empty State</p>
+        <Card>
+          <EmptyState
+            title="No dares found"
+            description="Be the first to create a dare in this category and start earning."
+            action={<Button>Create a Dare</Button>}
+          />
+        </Card>
+      </section>
+
     </div>
   );
 }
