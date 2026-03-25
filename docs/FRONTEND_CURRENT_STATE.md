@@ -1,29 +1,31 @@
 # Frontend Current State
 
 ## Status
-Phase 1 complete. Moving into Phase 2 — Core Pages.
+Phase 2 complete. Moving into Phase 3 — UX Enhancements.
 
 ## What exists right now
-- Next.js app initialized with TypeScript and Tailwind CSS
-- App layout set up with Header, global styles, and metadata
-- `src/components/layout/Header.tsx` — sticky nav with desktop links and mobile hamburger menu
-- `src/components/ui/Button.tsx` — primary / secondary / outline / ghost / danger variants, 3 sizes
-- `src/components/ui/Card.tsx` — reusable card shell with optional padding
-- `src/components/ui/Badge.tsx` — category / reward / success / pending / danger variants
-- `src/components/ui/SectionTitle.tsx` — heading + optional subtitle
-- `src/components/ui/EmptyState.tsx` — icon + title + description + optional CTA
-- `src/components/ui/Skeleton.tsx` — Skeleton line + CardSkeleton loader
-- `src/lib/utils.ts` — cn() class name helper
-- `docs/` folder with full project context, UI guidelines, page flows, and task list
 
-## Current frontend focus
-- Build core pages using the established component system
-- Landing page
-- Dare feed page
-- Dare details page
-- Create dare page
-- Profile and wallet pages
-- Submission upload page
+### Layout & Components
+- App layout with sticky Header (desktop + mobile nav)
+- `src/components/layout/Header.tsx`
+- `src/components/ui/Button.tsx` — 5 variants, 3 sizes
+- `src/components/ui/Card.tsx`
+- `src/components/ui/Badge.tsx` — 6 variants
+- `src/components/ui/SectionTitle.tsx`
+- `src/components/ui/EmptyState.tsx`
+- `src/components/ui/Skeleton.tsx`
+- `src/components/dare/DareCard.tsx` — reusable dare card used across pages
+- `src/lib/utils.ts` — cn() helper
+- `src/lib/mock-data.ts` — 8 mock dares across 5 categories
+
+### Pages (all using mock data)
+- `/` — Landing page: hero, how it works, featured dares, categories, CTA
+- `/feed` — Dare feed with category filter chips
+- `/feed/[id]` — Dare details with accept action
+- `/create` — Create dare form (title, description, category, reward, proof requirement)
+- `/profile` — Profile with stats, created dares, completed dares, activity
+- `/wallet` — Balance card, pending rewards, transaction history
+- `/submit/[id]` — Upload proof form with dare summary
 
 ## What is not finalized yet
 - real API integration
@@ -31,26 +33,25 @@ Phase 1 complete. Moving into Phase 2 — Core Pages.
 - payment flow
 - moderation dashboard behavior
 - final DB-driven states
+- toast/success/error feedback UI
+- skeleton loaders on pages
+- mobile nav drawer polish
 
 ## Assumptions for now
-- mock data is acceptable for UI-first work
-- components should be built in a way that can later connect to real APIs
-- design should be mobile-friendly from the start
+- mock data is used throughout — components are structured for easy API swap
+- design is mobile-friendly from the start
 
 ## Next Recommended Step
-Start Phase 2 — Core Pages:
-1. landing page
-2. dare feed page
-3. dare details page
-4. create dare page
-5. profile page
-6. wallet page
-7. submission upload page
+Start Phase 3 — UX Enhancements:
+1. responsive mobile navigation improvements
+2. filter/sort UI for dare feed
+3. toast/success/error UI
+4. empty states across pages
+5. skeleton loaders
 
 ## Notes for AI
 If asked to implement UI:
-- prefer mock data first
-- keep components reusable
-- use existing components (Button, Card, Badge, etc.) — do not rebuild them
+- use existing components (Button, Card, Badge, DareCard, etc.) — do not rebuild them
+- use mock data from `src/lib/mock-data.ts`
+- prefer clean MVP solutions
 - do not block progress waiting for backend
-- prioritize clean visuals and UX

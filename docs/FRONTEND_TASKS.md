@@ -11,14 +11,14 @@
 - [x] Create reusable section title component
 - [x] Create empty/loading UI patterns
 
-## Phase 2 — Core Pages
-- [ ] Build landing page
-- [ ] Build dare feed page
-- [ ] Build dare details page
-- [ ] Build create dare page
-- [ ] Build profile page
-- [ ] Build wallet page
-- [ ] Build submission upload page
+## Phase 2 — Core Pages ✅
+- [x] Build landing page
+- [x] Build dare feed page
+- [x] Build dare details page
+- [x] Build create dare page
+- [x] Build profile page
+- [x] Build wallet page
+- [x] Build submission upload page
 
 ## Phase 3 — UX Enhancements
 - [ ] Add responsive mobile navigation
@@ -36,6 +36,6 @@
 - [ ] Add protected page handling strategy
 
 ## Current Priority
-- [ ] build clean frontend structure
-- [ ] implement UI with mock data first
+- [x] build clean frontend structure
+- [x] implement UI with mock data first
 - [ ] keep everything ready for later backend connection
