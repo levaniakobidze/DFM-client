@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import { CardSkeleton } from "@/components/ui/Skeleton";
 import { useDares } from "@/hooks/useDares";
 import { DareCategory, Dare } from "@/lib/mock-data";
+import { useLanguage } from "@/context/LanguageContext";
 
 const categories: (DareCategory | "All")[] = ["All", "Fun", "Social", "Creative", "Video", "Public"];
 
@@ -23,11 +24,21 @@ function sortDares(dares: Dare[], sort: SortOption): Dare[] {
 }
 
 export default function FeedPage() {
+  const { t } = useLanguage();
   const [active, setActive] = useState<DareCategory | "All">("All");
   const [sort, setSort] = useState<SortOption>("newest");
 
   const { data = [], isLoading, isError } = useDares(active);
   const sorted = sortDares(data, sort);
+
+  const categoryLabels: Record<string, string> = {
+    All: t.feed.all,
+    Fun: t.landing.categoryLabels.Fun,
+    Social: t.landing.categoryLabels.Social,
+    Creative: t.landing.categoryLabels.Creative,
+    Video: t.landing.categoryLabels.Video,
+    Public: t.landing.categoryLabels.Public,
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -35,11 +46,11 @@ export default function FeedPage() {
       {/* Header row */}
       <div className="flex items-end justify-between mb-6">
         <SectionTitle
-          title="Browse Dares"
-          subtitle={isLoading ? "Loading..." : `${data.length} challenge${data.length !== 1 ? "s" : ""} available`}
+          title={t.feed.title}
+          subtitle={isLoading ? t.feed.loading : `${data.length} ${data.length !== 1 ? t.feed.challenges : t.feed.challenge} ${t.feed.available}`}
         />
         <Link href="/create">
-          <Button size="sm">+ Create Dare</Button>
+          <Button size="sm">{t.feed.createDare}</Button>
         </Link>
       </div>
 
@@ -56,7 +67,7 @@ export default function FeedPage() {
                   : "bg-white text-gray-600 border-gray-200 hover:border-violet-400 hover:text-violet-600"
               }`}
             >
-              {cat}
+              {categoryLabels[cat]}
             </button>
           ))}
         </div>
@@ -66,9 +77,9 @@ export default function FeedPage() {
           onChange={(e) => setSort(e.target.value as SortOption)}
           className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 shrink-0"
         >
-          <option value="newest">Newest</option>
-          <option value="reward-high">Highest Reward</option>
-          <option value="reward-low">Lowest Reward</option>
+          <option value="newest">{t.feed.sortNewest}</option>
+          <option value="reward-high">{t.feed.sortHighest}</option>
+          <option value="reward-low">{t.feed.sortLowest}</option>
         </select>
       </div>
 
@@ -80,15 +91,15 @@ export default function FeedPage() {
       ) : isError ? (
         <EmptyState
           icon="⚠️"
-          title="Failed to load dares"
-          description="Something went wrong. Please try again."
-          action={<Button onClick={() => window.location.reload()}>Retry</Button>}
+          title={t.feed.errorTitle}
+          description={t.feed.errorDesc}
+          action={<Button onClick={() => window.location.reload()}>{t.feed.retry}</Button>}
         />
       ) : sorted.length === 0 ? (
         <EmptyState
-          title="No dares in this category"
-          description="Be the first to post a dare here."
-          action={<Link href="/create"><Button>Create a Dare</Button></Link>}
+          title={t.feed.emptyTitle}
+          description={t.feed.emptyDesc}
+          action={<Link href="/create"><Button>{t.feed.createDare}</Button></Link>}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

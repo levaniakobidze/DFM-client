@@ -1,25 +1,29 @@
+"use client";
+
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import SectionTitle from "@/components/ui/SectionTitle";
 import DareCard from "@/components/dare/DareCard";
 import { mockDares } from "@/lib/mock-data";
-
-const stats = [
-  { label: "Created", value: "8", icon: "🎯" },
-  { label: "Completed", value: "12", icon: "✅" },
-  { label: "Earned", value: "$245", icon: "💰" },
-  { label: "Success", value: "92%", icon: "⚡" },
-];
-
-const recentActivity = [
-  { id: "1", label: "Completed: Eat a spoonful of hot sauce", time: "2 hours ago", type: "success" },
-  { id: "2", label: "Posted: Draw a portrait in 60 seconds", time: "Yesterday", type: "category" },
-  { id: "3", label: "Proof under review: Compliment 5 strangers", time: "2 days ago", type: "pending" },
-] as const;
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProfilePage() {
+  const { t } = useLanguage();
   const createdDares = mockDares.slice(0, 2);
   const completedDares = mockDares.slice(2, 4);
+
+  const stats = [
+    { label: t.profile.statsCreated, value: "8", icon: "🎯" },
+    { label: t.profile.statsCompleted, value: "12", icon: "✅" },
+    { label: t.profile.statsEarned, value: "$245", icon: "💰" },
+    { label: t.profile.statsSuccess, value: "92%", icon: "⚡" },
+  ];
+
+  const recentActivity = [
+    { id: "1", label: "Completed: Eat a spoonful of hot sauce", time: "2 hours ago", type: "success" as const },
+    { id: "2", label: "Posted: Draw a portrait in 60 seconds", time: "Yesterday", type: "category" as const },
+    { id: "3", label: "Proof under review: Compliment 5 strangers", time: "2 days ago", type: "pending" as const },
+  ];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
@@ -32,9 +36,9 @@ export default function ProfilePage() {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold text-gray-900">Alex M.</h1>
-            <p className="text-sm text-gray-500">Member since March 2026</p>
+            <p className="text-sm text-gray-500">{t.profile.memberSince} March 2026</p>
           </div>
-          <Badge variant="success" className="shrink-0">Active</Badge>
+          <Badge variant="success" className="shrink-0">{t.profile.active}</Badge>
         </div>
       </Card>
 
@@ -51,7 +55,7 @@ export default function ProfilePage() {
 
       {/* Created dares */}
       <div>
-        <SectionTitle title="Created Dares" subtitle="Dares you posted." className="mb-4" />
+        <SectionTitle title={t.profile.createdDares} subtitle={t.profile.createdSubtitle} className="mb-4" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {createdDares.map((dare) => (
             <DareCard key={dare.id} dare={dare} />
@@ -61,16 +65,16 @@ export default function ProfilePage() {
 
       {/* Completed dares */}
       <div>
-        <SectionTitle title="Completed Dares" subtitle="Challenges you crushed." className="mb-4" />
+        <SectionTitle title={t.profile.completedDares} subtitle={t.profile.completedSubtitle} className="mb-4" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {completedDares.map((dare) => (
             <Card key={dare.id}>
               <div className="flex items-center justify-between mb-3">
                 <Badge variant="category">{dare.category}</Badge>
-                <Badge variant="success">Completed</Badge>
+                <Badge variant="success">{t.profile.completed}</Badge>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2 leading-snug">{dare.title}</h3>
-              <p className="text-base font-bold text-amber-500">+${dare.reward.toFixed(2)} earned</p>
+              <p className="text-base font-bold text-amber-500">+${dare.reward.toFixed(2)} {t.profile.earned}</p>
             </Card>
           ))}
         </div>
@@ -78,14 +82,14 @@ export default function ProfilePage() {
 
       {/* Recent activity */}
       <div>
-        <SectionTitle title="Recent Activity" className="mb-4" />
+        <SectionTitle title={t.profile.recentActivity} className="mb-4" />
         <Card padding={false}>
           <ul className="divide-y divide-gray-100">
             {recentActivity.map((item) => (
               <li key={item.id} className="flex items-center justify-between px-5 py-4 gap-4">
                 <div className="flex items-center gap-3 min-w-0">
                   <Badge variant={item.type} className="shrink-0">
-                    {item.type === "success" ? "Done" : item.type === "pending" ? "Pending" : "New"}
+                    {item.type === "success" ? t.profile.activityDone : item.type === "pending" ? t.profile.activityPending : t.profile.activityNew}
                   </Badge>
                   <p className="text-sm text-gray-700 truncate">{item.label}</p>
                 </div>

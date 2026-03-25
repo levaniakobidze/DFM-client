@@ -6,8 +6,10 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import { Skeleton } from "@/components/ui/Skeleton";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import { useWallet } from "@/hooks/useWallet";
+import { useLanguage } from "@/context/LanguageContext";
 
 function WalletContent() {
+  const { t } = useLanguage();
   const { data, isLoading } = useWallet();
 
   if (isLoading) {
@@ -25,21 +27,21 @@ function WalletContent() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
-      <SectionTitle title="Wallet" subtitle="Your balance and transactions." />
+      <SectionTitle title={t.wallet.title} subtitle={t.wallet.subtitle} />
 
       {/* Balance card */}
       <div className="bg-violet-600 rounded-2xl p-6 text-white">
-        <p className="text-sm opacity-75 mb-1">Available Balance</p>
+        <p className="text-sm opacity-75 mb-1">{t.wallet.availableBalance}</p>
         <p className="text-4xl font-bold mb-5">${data.balance.toFixed(2)}</p>
-        <Button variant="secondary" size="sm">Request Payout</Button>
+        <Button variant="secondary" size="sm">{t.wallet.requestPayout}</Button>
       </div>
 
       {/* Pending rewards */}
       <Card>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-semibold text-gray-900">Pending Rewards</p>
-            <p className="text-xs text-gray-500 mt-0.5">Awaiting proof approval</p>
+            <p className="font-semibold text-gray-900">{t.wallet.pendingRewards}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{t.wallet.pendingSubtext}</p>
           </div>
           <span className="text-2xl font-bold text-amber-500">${data.pending.toFixed(2)}</span>
         </div>
@@ -47,7 +49,7 @@ function WalletContent() {
 
       {/* Transaction history */}
       <div>
-        <SectionTitle title="Transaction History" className="mb-4" />
+        <SectionTitle title={t.wallet.transactionHistory} className="mb-4" />
         <Card padding={false}>
           <ul className="divide-y divide-gray-100">
             {data.transactions.map((tx) => (

@@ -8,6 +8,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { useToast } from "@/context/ToastContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -15,6 +16,7 @@ interface Props {
 
 export default function SubmitPage({ params }: Props) {
   const { id } = use(params);
+  const { t } = useLanguage();
   const { showToast } = useToast();
   const dare = mockDares.find((d) => d.id === id);
   const [submitted, setSubmitted] = useState(false);
@@ -27,16 +29,14 @@ export default function SubmitPage({ params }: Props) {
         <div className="w-20 h-20 rounded-2xl bg-amber-50 flex items-center justify-center text-4xl mx-auto mb-6">
           ⏳
         </div>
-        <h2 className="text-2xl font-extrabold text-gray-900 mb-3">Proof Submitted!</h2>
-        <p className="text-gray-500 mb-2 leading-relaxed">
-          Your proof is now under review. The dare creator will check your submission and approve it.
-        </p>
+        <h2 className="text-2xl font-extrabold text-gray-900 mb-3">{t.submit.successTitle}</h2>
+        <p className="text-gray-500 mb-2 leading-relaxed">{t.submit.successText}</p>
         <p className="text-sm text-violet-600 font-medium mb-8">
-          Potential reward: <span className="text-amber-500 font-bold">${dare.reward.toFixed(2)}</span>
+          {t.submit.potentialReward} <span className="text-amber-500 font-bold">${dare.reward.toFixed(2)}</span>
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/feed"><Button variant="outline">Back to Feed</Button></Link>
-          <Link href="/profile"><Button>View My Activity</Button></Link>
+          <Link href="/feed"><Button variant="outline">{t.submit.backToFeed}</Button></Link>
+          <Link href="/profile"><Button>{t.submit.viewActivity}</Button></Link>
         </div>
       </div>
     );
@@ -48,10 +48,10 @@ export default function SubmitPage({ params }: Props) {
         href={`/feed/${dare.id}`}
         className="text-sm text-gray-500 hover:text-gray-700 transition-colors inline-block"
       >
-        ← Back to Dare
+        {t.submit.backToDare}
       </Link>
 
-      <SectionTitle title="Upload Proof" subtitle="Submit your proof to claim the reward." />
+      <SectionTitle title={t.submit.title} subtitle={t.submit.subtitle} />
 
       {/* Dare summary */}
       <Card>
@@ -67,31 +67,31 @@ export default function SubmitPage({ params }: Props) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          showToast("Proof submitted! Awaiting review.", "info");
+          showToast(t.submit.successTitle, "info");
           setSubmitted(true);
         }}
         className="space-y-4"
       >
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-3">Upload File</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">{t.submit.uploadFile}</h3>
           <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl py-10 cursor-pointer hover:border-violet-400 transition-colors">
             <span className="text-3xl mb-2">📁</span>
-            <span className="text-sm font-medium text-gray-700">Click to upload or drag and drop</span>
-            <span className="text-xs text-gray-400 mt-1">Video or image accepted</span>
+            <span className="text-sm font-medium text-gray-700">{t.submit.uploadText}</span>
+            <span className="text-xs text-gray-400 mt-1">{t.submit.uploadSubtext}</span>
             <input type="file" className="hidden" accept="image/*,video/*" />
           </label>
         </Card>
 
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-3">Additional Notes</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">{t.submit.notes}</h3>
           <textarea
             rows={3}
-            placeholder="Any context or notes for the reviewer..."
+            placeholder={t.submit.notesPlaceholder}
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
           />
         </Card>
 
-        <Button type="submit" size="lg" className="w-full">Submit Proof</Button>
+        <Button type="submit" size="lg" className="w-full">{t.submit.submit}</Button>
       </form>
     </div>
   );

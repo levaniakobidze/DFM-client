@@ -50,14 +50,14 @@
 - [x] Improve empty states messaging (more engaging text)
 - [x] Add confirmation states (success screens, feedback)
 
-## Phase 6 — Georgian Localization
-- [ ] Setup i18n system (simple or library-based)
-- [ ] Extract all UI text into translation files
-- [ ] Translate entire UI to Georgian
-- [ ] Ensure Georgian typography looks good
-- [ ] Adjust spacing for longer Georgian words
-- [ ] Test all pages in Georgian language
-- [ ] Add fallback system for missing translations
+## Phase 6 — Georgian Localization ✅
+- [x] Setup i18n system (simple or library-based)
+- [x] Extract all UI text into translation files
+- [x] Translate entire UI to Georgian
+- [x] Ensure Georgian typography looks good
+- [x] Adjust spacing for longer Georgian words
+- [x] Test all pages in Georgian language
+- [x] Add fallback system for missing translations
 
 ## Phase 7 — Auth UI & Protected Experience
 - [ ] Build login page UI

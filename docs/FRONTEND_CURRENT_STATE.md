@@ -1,7 +1,7 @@
 # Frontend Current State
 
 ## Status
-Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian Localization.
+Phase 6 complete. Full Georgian localization implemented via context-based i18n. Ready for Phase 7 — Auth UI & Protected Experience.
 
 ## What exists right now
 
@@ -9,8 +9,18 @@ Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian 
 - `src/providers/QueryProvider.tsx` — TanStack Query
 - `src/store/useAuthStore.ts` — Zustand auth
 - `src/context/ToastContext.tsx` — Toast system
+- `src/context/LanguageContext.tsx` — Language context with `useLanguage()` hook
+- `src/i18n/en.ts` — Full English translations (`Translations` type exported)
+- `src/i18n/ka.ts` — Full Georgian translations (implements `Translations`)
 - `src/services/` — dare.service.ts, wallet.service.ts (mock, swap-ready)
 - `src/hooks/` — useDares, useDare, useCreateDare, useWallet
+
+### i18n System
+- Context-based, no URL changes (no `/en/` or `/ka/` prefixes)
+- `LanguageProvider` wraps entire app in `layout.tsx`
+- `useLanguage()` returns `{ t, locale, setLocale }`
+- EN/KA toggle button in Header (desktop + mobile)
+- All UI text uses `t.*` keys — zero hardcoded strings remain
 
 ### UI Components (polished)
 - `Button` — active:scale-95 press effect, cursor-pointer, transition-all
@@ -18,16 +28,17 @@ Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian 
 - `DareCard` — hover lift, larger reward amount, divider before actions
 - `Skeleton` — shimmer animation (CSS gradient sweep) instead of plain pulse
 - `EmptyState` — larger icon, bolder title, more engaging layout
+- `ProtectedRoute` — translated title/desc/button via `useLanguage()`
 - All components: consistent spacing, leading, and typography
 
-### Pages
-- `/` — Landing: stronger hero with violet accent, icon-enhanced steps, emoji categories, larger CTAs
-- `/feed` — Horizontal scrollable chips on mobile, active:scale-95 on chips
-- `/feed/[id]` — useDare hook, skeleton while loading
-- `/create` — ProtectedRoute + useCreateDare mutation
-- `/profile` — Icon stats, active badge in header, better completed dare cards
-- `/wallet` — ProtectedRoute + useWallet hook
-- `/submit/[id]` — Polished success screen with reward preview and two action buttons
+### Pages (all fully translated)
+- `/` — Landing: all text from `t.landing.*`
+- `/feed` — Title, subtitle, category labels, sort options, empty/error states
+- `/feed/[id]` — Back link, labels, action card, not-found message
+- `/create` — Form labels, placeholders, success screen, toast messages
+- `/profile` — Stats labels, section titles, badge labels, activity types
+- `/wallet` — Balance card, pending card, transaction history header
+- `/submit/[id]` — Back link, section title, upload labels, success screen
 
 ### UX Micro-interactions
 - All buttons: press scale effect
@@ -36,7 +47,6 @@ Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian 
 - Category links on landing: hover bg-violet-50 + border highlight
 
 ## What is not done yet
-- Georgian localization (Phase 6)
 - Auth UI pages (Phase 7)
 - Dare interactions: likes, bookmarks, share (Phase 8)
 - Notifications UI (Phase 9)
@@ -47,3 +57,5 @@ Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian 
 - Use `hover` prop on Card for interactive card surfaces
 - Shimmer is CSS-based via `.shimmer-effect` class in globals.css
 - Do not rebuild existing components — extend them
+- i18n is context-based — add new keys to both `en.ts` and `ka.ts` when adding text
+- `Translations` type is exported from `en.ts` — `ka.ts` must implement it fully
