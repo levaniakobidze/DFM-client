@@ -4,6 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { useDare } from "@/hooks/useDare";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -16,6 +17,7 @@ interface Props {
 export default function DareDetailsPage({ params }: Props) {
   const { id } = use(params);
   const { t } = useLanguage();
+  const { isLoggedIn } = useAuthStore();
   const { data: dare, isLoading } = useDare(id);
 
   if (isLoading) {
@@ -74,10 +76,22 @@ export default function DareDetailsPage({ params }: Props) {
               {t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}
             </p>
           </div>
-          <Link href={`/submit/${dare.id}`}>
-            <Button size="lg">{t.dareDetails.acceptDare}</Button>
-          </Link>
+          {isLoggedIn ? (
+            <Link href={`/submit/${dare.id}`}>
+              <Button size="lg">{t.dareDetails.acceptDare}</Button>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <Button size="lg">{t.dareDetails.acceptDare}</Button>
+            </Link>
+          )}
         </div>
+        {!isLoggedIn && (
+          <p className="text-xs text-gray-400 mt-3 text-right">
+            <Link href="/login" className="text-violet-600 hover:underline font-medium">{t.nav.signIn}</Link>
+            {" "}{t.protected.desc.toLowerCase()}
+          </p>
+        )}
       </Card>
     </div>
   );

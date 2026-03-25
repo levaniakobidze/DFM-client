@@ -59,14 +59,14 @@
 - [x] Test all pages in Georgian language
 - [x] Add fallback system for missing translations
 
-## Phase 7 — Auth UI & Protected Experience
-- [ ] Build login page UI
-- [ ] Build register page UI
-- [ ] Add auth modal option (optional)
-- [ ] Improve protected route UX
-- [ ] Add "login required" prompts for actions
-- [ ] Add user session indicator in navbar
-- [ ] Add logout flow UI
+## Phase 7 — Auth UI & Protected Experience ✅
+- [x] Build login page UI
+- [x] Build register page UI
+- [x] Add auth modal option (optional)
+- [x] Improve protected route UX
+- [x] Add "login required" prompts for actions
+- [x] Add user session indicator in navbar
+- [x] Add logout flow UI
 
 ## Phase 8 — Dare Interaction Enhancements
 - [ ] Add like/reaction system to dares

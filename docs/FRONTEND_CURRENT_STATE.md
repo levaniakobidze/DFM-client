@@ -1,7 +1,7 @@
 # Frontend Current State
 
 ## Status
-Phase 6 complete. Full Georgian localization implemented via context-based i18n. Ready for Phase 7 — Auth UI & Protected Experience.
+Phase 7 complete. Auth UI & Protected Experience implemented. Ready for Phase 8 — Dare Interaction Enhancements.
 
 ## What exists right now
 
@@ -10,17 +10,23 @@ Phase 6 complete. Full Georgian localization implemented via context-based i18n.
 - `src/store/useAuthStore.ts` — Zustand auth
 - `src/context/ToastContext.tsx` — Toast system
 - `src/context/LanguageContext.tsx` — Language context with `useLanguage()` hook
-- `src/i18n/en.ts` — Full English translations (`Translations` type exported)
-- `src/i18n/ka.ts` — Full Georgian translations (implements `Translations`)
+- `src/i18n/en.ts` — Full English translations (`Translations` type exported), includes `auth` section
+- `src/i18n/ka.ts` — Full Georgian translations (implements `Translations`), includes `auth` section
 - `src/services/` — dare.service.ts, wallet.service.ts (mock, swap-ready)
 - `src/hooks/` — useDares, useDare, useCreateDare, useWallet
 
 ### i18n System
-- Context-based, no URL changes (no `/en/` or `/ka/` prefixes)
+- Context-based, no URL changes
 - `LanguageProvider` wraps entire app in `layout.tsx`
 - `useLanguage()` returns `{ t, locale, setLocale }`
 - EN/KA toggle button in Header (desktop + mobile)
 - All UI text uses `t.*` keys — zero hardcoded strings remain
+
+### Auth Pages
+- `/login` — Email/password form, demo login, link to register, "forgot password" label
+- `/register` — Name/email/password form, demo register, link to login
+- Both redirect to `/feed` after success (800ms simulated delay)
+- Both fully translated via `useLanguage()`
 
 ### UI Components (polished)
 - `Button` — active:scale-95 press effect, cursor-pointer, transition-all
@@ -28,26 +34,28 @@ Phase 6 complete. Full Georgian localization implemented via context-based i18n.
 - `DareCard` — hover lift, larger reward amount, divider before actions
 - `Skeleton` — shimmer animation (CSS gradient sweep) instead of plain pulse
 - `EmptyState` — larger icon, bolder title, more engaging layout
-- `ProtectedRoute` — translated title/desc/button via `useLanguage()`
-- All components: consistent spacing, leading, and typography
+- `ProtectedRoute` — improved layout with icon, two buttons (Sign In → /login, Demo), translated
+
+### Header (upgraded)
+- Logged-in state: user avatar (initials) + name in pill button → dropdown with Profile, Wallet, Sign Out
+- Dropdown closes on outside click (useEffect + ref)
+- Logged-out state: Sign In → `/login`, Get Started → `/register`
+- Mobile menu: shows avatar + name, Profile/Wallet links, Sign Out button
+- Profile and Wallet links moved out of main nav into user dropdown
 
 ### Pages (all fully translated)
-- `/` — Landing: all text from `t.landing.*`
-- `/feed` — Title, subtitle, category labels, sort options, empty/error states
-- `/feed/[id]` — Back link, labels, action card, not-found message
-- `/create` — Form labels, placeholders, success screen, toast messages
-- `/profile` — Stats labels, section titles, badge labels, activity types
-- `/wallet` — Balance card, pending card, transaction history header
-- `/submit/[id]` — Back link, section title, upload labels, success screen
+- `/` — Landing
+- `/feed` — Dare feed with filters
+- `/feed/[id]` — Dare details + login prompt on "Accept Dare" if not logged in
+- `/create` — ProtectedRoute + create dare form
+- `/profile` — Profile stats and activity
+- `/wallet` — ProtectedRoute + wallet balance
+- `/submit/[id]` — Proof upload
 
-### UX Micro-interactions
-- All buttons: press scale effect
-- DareCard: hover lift + shadow
-- Category chips on feed: shrink-0 for mobile scroll, active scale
-- Category links on landing: hover bg-violet-50 + border highlight
+### Login Required Prompts
+- On `/feed/[id]`: "Accept Dare" redirects to `/login` if not logged in, plus a small hint text below
 
 ## What is not done yet
-- Auth UI pages (Phase 7)
 - Dare interactions: likes, bookmarks, share (Phase 8)
 - Notifications UI (Phase 9)
 - Wallet UX improvements (Phase 10)
@@ -59,3 +67,4 @@ Phase 6 complete. Full Georgian localization implemented via context-based i18n.
 - Do not rebuild existing components — extend them
 - i18n is context-based — add new keys to both `en.ts` and `ka.ts` when adding text
 - `Translations` type is exported from `en.ts` — `ka.ts` must implement it fully
+- Auth is demo-only: `login(DEMO_USER)` from Zustand, no real API call
