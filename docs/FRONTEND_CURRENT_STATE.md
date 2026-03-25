@@ -1,22 +1,29 @@
 # Frontend Current State
 
 ## Status
-Frontend planning stage.
+Phase 1 complete. Moving into Phase 2 — Core Pages.
 
 ## What exists right now
-- We are starting from the frontend side first
-- The goal is to design and structure the UI before deep backend integration
-- Tailwind CSS should be used for styling
-- Frontend and backend are in separate folders/projects
+- Next.js app initialized with TypeScript and Tailwind CSS
+- App layout set up with Header, global styles, and metadata
+- `src/components/layout/Header.tsx` — sticky nav with desktop links and mobile hamburger menu
+- `src/components/ui/Button.tsx` — primary / secondary / outline / ghost / danger variants, 3 sizes
+- `src/components/ui/Card.tsx` — reusable card shell with optional padding
+- `src/components/ui/Badge.tsx` — category / reward / success / pending / danger variants
+- `src/components/ui/SectionTitle.tsx` — heading + optional subtitle
+- `src/components/ui/EmptyState.tsx` — icon + title + description + optional CTA
+- `src/components/ui/Skeleton.tsx` — Skeleton line + CardSkeleton loader
+- `src/lib/utils.ts` — cn() class name helper
+- `docs/` folder with full project context, UI guidelines, page flows, and task list
 
 ## Current frontend focus
-- define page structure
-- define reusable component structure
-- build landing page
-- build dare feed UI
-- build create dare UI
-- build profile/wallet UI skeleton
-- build clean layout/navigation
+- Build core pages using the established component system
+- Landing page
+- Dare feed page
+- Dare details page
+- Create dare page
+- Profile and wallet pages
+- Submission upload page
 
 ## What is not finalized yet
 - real API integration
@@ -31,16 +38,19 @@ Frontend planning stage.
 - design should be mobile-friendly from the start
 
 ## Next Recommended Step
-Create the frontend folder structure and start with:
-1. app layout
-2. shared UI components
-3. landing page
-4. dare feed page
-5. create dare page
+Start Phase 2 — Core Pages:
+1. landing page
+2. dare feed page
+3. dare details page
+4. create dare page
+5. profile page
+6. wallet page
+7. submission upload page
 
 ## Notes for AI
 If asked to implement UI:
 - prefer mock data first
 - keep components reusable
+- use existing components (Button, Card, Badge, etc.) — do not rebuild them
 - do not block progress waiting for backend
 - prioritize clean visuals and UX
