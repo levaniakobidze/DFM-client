@@ -1,19 +1,41 @@
+"use client";
+
+import { use } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { mockDares } from "@/lib/mock-data";
+import { useDare } from "@/hooks/useDare";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import { CardSkeleton } from "@/components/ui/Skeleton";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default async function DareDetailsPage({ params }: Props) {
-  const { id } = await params;
-  const dare = mockDares.find((d) => d.id === id);
+export default function DareDetailsPage({ params }: Props) {
+  const { id } = use(params);
+  const { data: dare, isLoading } = useDare(id);
 
-  if (!dare) notFound();
+  if (isLoading) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-10 space-y-4">
+        <CardSkeleton />
+        <CardSkeleton />
+        <CardSkeleton />
+      </div>
+    );
+  }
+
+  if (!dare) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
+        <p className="text-gray-500">Dare not found.</p>
+        <Link href="/feed" className="text-sm text-violet-600 hover:underline mt-2 inline-block">
+          Back to Feed
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">

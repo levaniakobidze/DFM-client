@@ -5,13 +5,17 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import SectionTitle from "@/components/ui/SectionTitle";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import { useCreateDare } from "@/hooks/useCreateDare";
 import { useToast } from "@/context/ToastContext";
+import { DareCategory } from "@/lib/mock-data";
 
-const categories = ["Fun", "Social", "Creative", "Video", "Public"];
+const categories: DareCategory[] = ["Fun", "Social", "Creative", "Video", "Public"];
 
-export default function CreateDarePage() {
+function CreateDareForm() {
   const { showToast } = useToast();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const { mutate: createDare, isPending } = useCreateDare();
+  const [selectedCategory, setSelectedCategory] = useState<DareCategory | "">("");
   const [submitted, setSubmitted] = useState(false);
 
   if (submitted) {
@@ -28,15 +32,38 @@ export default function CreateDarePage() {
     );
   }
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!selectedCategory) {
+      showToast("Please select a category.", "error");
+      return;
+    }
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    createDare(
+      {
+        title: data.get("title") as string,
+        description: data.get("description") as string,
+        category: selectedCategory,
+        reward: Number(data.get("reward")),
+        proofRequirement: data.get("proofRequirement") as string,
+      },
+      {
+        onSuccess: () => {
+          showToast("Dare posted successfully!");
+          setSubmitted(true);
+        },
+        onError: () => showToast("Failed to post dare. Try again.", "error"),
+      }
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <SectionTitle
-        title="Create a Dare"
-        subtitle="Post a challenge and set your reward."
-        className="mb-8"
-      />
+      <SectionTitle title="Create a Dare" subtitle="Post a challenge and set your reward." className="mb-8" />
 
-      <form onSubmit={(e) => { e.preventDefault(); showToast("Dare posted successfully!"); setSubmitted(true); }} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5">
 
         {/* Basic info */}
         <Card>
@@ -45,6 +72,7 @@ export default function CreateDarePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
               <input
+                name="title"
                 type="text"
                 required
                 placeholder="e.g. Eat a spoonful of hot sauce"
@@ -54,6 +82,7 @@ export default function CreateDarePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
+                name="description"
                 required
                 rows={3}
                 placeholder="Describe the dare in detail..."
@@ -90,6 +119,7 @@ export default function CreateDarePage() {
           <div className="relative max-w-xs">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
             <input
+              name="reward"
               type="number"
               required
               min="1"
@@ -103,6 +133,7 @@ export default function CreateDarePage() {
         <Card>
           <h3 className="font-semibold text-gray-900 mb-4">Proof Requirement</h3>
           <textarea
+            name="proofRequirement"
             required
             rows={2}
             placeholder="e.g. Upload a video showing you completing the dare from start to finish."
@@ -110,8 +141,18 @@ export default function CreateDarePage() {
           />
         </Card>
 
-        <Button type="submit" size="lg" className="w-full">Post Dare</Button>
+        <Button type="submit" size="lg" className="w-full" disabled={isPending}>
+          {isPending ? "Posting..." : "Post Dare"}
+        </Button>
       </form>
     </div>
+  );
+}
+
+export default function CreateDarePage() {
+  return (
+    <ProtectedRoute>
+      <CreateDareForm />
+    </ProtectedRoute>
   );
 }

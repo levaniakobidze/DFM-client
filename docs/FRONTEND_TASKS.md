@@ -28,14 +28,14 @@
 - [x] Add empty states for feed/profile/wallet
 - [x] Add basic skeleton loaders
 
-## Phase 4 — Integration Preparation
-- [ ] Add TanStack Query setup
-- [ ] Add Zustand setup
-- [ ] Add API layer structure
-- [ ] Replace mock data with API-ready hooks
-- [ ] Add protected page handling strategy
+## Phase 4 — Integration Preparation ✅
+- [x] Add TanStack Query setup
+- [x] Add Zustand setup
+- [x] Add API layer structure
+- [x] Replace mock data with API-ready hooks
+- [x] Add protected page handling strategy
 
 ## Current Priority
 - [x] build clean frontend structure
 - [x] implement UI with mock data first
-- [ ] keep everything ready for later backend connection
+- [x] keep everything ready for later backend connection

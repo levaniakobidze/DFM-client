@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { ToastProvider } from "@/context/ToastContext";
+import QueryProvider from "@/providers/QueryProvider";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 font-sans">
-        <ToastProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-        </ToastProvider>
+        <QueryProvider>
+          <ToastProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+          </ToastProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
 import DareCard from "@/components/dare/DareCard";
 import EmptyState from "@/components/ui/EmptyState";
 import Button from "@/components/ui/Button";
 import { CardSkeleton } from "@/components/ui/Skeleton";
-import { mockDares, DareCategory, Dare } from "@/lib/mock-data";
+import { useDares } from "@/hooks/useDares";
+import { DareCategory, Dare } from "@/lib/mock-data";
 
 const categories: (DareCategory | "All")[] = ["All", "Fun", "Social", "Creative", "Video", "Public"];
 
@@ -24,15 +25,9 @@ function sortDares(dares: Dare[], sort: SortOption): Dare[] {
 export default function FeedPage() {
   const [active, setActive] = useState<DareCategory | "All">("All");
   const [sort, setSort] = useState<SortOption>("newest");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
-  }, []);
-
-  const filtered = active === "All" ? mockDares : mockDares.filter((d) => d.category === active);
-  const sorted = sortDares(filtered, sort);
+  const { data = [], isLoading, isError } = useDares(active);
+  const sorted = sortDares(data, sort);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -41,7 +36,7 @@ export default function FeedPage() {
       <div className="flex items-end justify-between mb-6">
         <SectionTitle
           title="Browse Dares"
-          subtitle={`${filtered.length} challenge${filtered.length !== 1 ? "s" : ""} available`}
+          subtitle={isLoading ? "Loading..." : `${data.length} challenge${data.length !== 1 ? "s" : ""} available`}
         />
         <Link href="/create">
           <Button size="sm">+ Create Dare</Button>
@@ -50,7 +45,6 @@ export default function FeedPage() {
 
       {/* Filters row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        {/* Category chips */}
         <div className="flex gap-2 flex-wrap">
           {categories.map((cat) => (
             <button
@@ -67,7 +61,6 @@ export default function FeedPage() {
           ))}
         </div>
 
-        {/* Sort dropdown */}
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortOption)}
@@ -80,27 +73,26 @@ export default function FeedPage() {
       </div>
 
       {/* Content */}
-      {loading ? (
+      {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <CardSkeleton key={i} />
-          ))}
+          {Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)}
         </div>
+      ) : isError ? (
+        <EmptyState
+          icon="⚠️"
+          title="Failed to load dares"
+          description="Something went wrong. Please try again."
+          action={<Button onClick={() => window.location.reload()}>Retry</Button>}
+        />
       ) : sorted.length === 0 ? (
         <EmptyState
           title="No dares in this category"
           description="Be the first to post a dare here."
-          action={
-            <Link href="/create">
-              <Button>Create a Dare</Button>
-            </Link>
-          }
+          action={<Link href="/create"><Button>Create a Dare</Button></Link>}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {sorted.map((dare) => (
-            <DareCard key={dare.id} dare={dare} />
-          ))}
+          {sorted.map((dare) => <DareCard key={dare.id} dare={dare} />)}
         </div>
       )}
     </div>

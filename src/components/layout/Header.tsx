@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
+import { useAuthStore } from "@/store/useAuthStore";
+
+const DEMO_USER = { id: "1", name: "Alex M.", email: "alex@example.com" };
 
 const navLinks = [
   { href: "/feed", label: "Browse Dares" },
@@ -13,6 +16,7 @@ const navLinks = [
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isLoggedIn, user, login, logout } = useAuthStore();
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -32,10 +36,19 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Desktop actions */}
+        {/* Desktop auth */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" size="sm">Sign In</Button>
-          <Button variant="primary" size="sm">Get Started</Button>
+          {isLoggedIn ? (
+            <>
+              <span className="text-sm text-gray-600 font-medium">{user?.name}</span>
+              <Button variant="ghost" size="sm" onClick={logout}>Sign Out</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" onClick={() => login(DEMO_USER)}>Sign In</Button>
+              <Button variant="primary" size="sm" onClick={() => login(DEMO_USER)}>Get Started</Button>
+            </>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -66,8 +79,23 @@ export default function Header() {
             </Link>
           ))}
           <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-            <Button variant="outline" size="sm" className="w-full">Sign In</Button>
-            <Button variant="primary" size="sm" className="w-full">Get Started</Button>
+            {isLoggedIn ? (
+              <>
+                <p className="text-sm text-gray-600 font-medium">{user?.name}</p>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => { logout(); setMobileOpen(false); }}>
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => { login(DEMO_USER); setMobileOpen(false); }}>
+                  Sign In
+                </Button>
+                <Button variant="primary" size="sm" className="w-full" onClick={() => { login(DEMO_USER); setMobileOpen(false); }}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
