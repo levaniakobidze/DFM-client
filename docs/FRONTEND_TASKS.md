@@ -39,3 +39,81 @@
 - [x] build clean frontend structure
 - [x] implement UI with mock data first
 - [x] keep everything ready for later backend connection
+
+## Phase 5 — Polish & UX Perfection ✅
+- [x] Improve spacing and visual hierarchy across all pages
+- [x] Ensure consistent typography and font sizing
+- [x] Improve CTA button visibility and placement
+- [x] Refine mobile UX (especially forms and feed)
+- [x] Add micro-interactions (hover, active states)
+- [x] Improve loading transitions (smoother skeletons)
+- [x] Improve empty states messaging (more engaging text)
+- [x] Add confirmation states (success screens, feedback)
+
+## Phase 6 — Georgian Localization
+- [ ] Setup i18n system (simple or library-based)
+- [ ] Extract all UI text into translation files
+- [ ] Translate entire UI to Georgian
+- [ ] Ensure Georgian typography looks good
+- [ ] Adjust spacing for longer Georgian words
+- [ ] Test all pages in Georgian language
+- [ ] Add fallback system for missing translations
+
+## Phase 7 — Auth UI & Protected Experience
+- [ ] Build login page UI
+- [ ] Build register page UI
+- [ ] Add auth modal option (optional)
+- [ ] Improve protected route UX
+- [ ] Add "login required" prompts for actions
+- [ ] Add user session indicator in navbar
+- [ ] Add logout flow UI
+
+## Phase 8 — Dare Interaction Enhancements
+- [ ] Add like/reaction system to dares
+- [ ] Add comment UI (optional MVP-lite)
+- [ ] Add "save/bookmark dare" feature
+- [ ] Add share functionality (copy link, social)
+- [ ] Add "report dare" UI
+- [ ] Add "my accepted dares" section
+
+## Phase 9 — Notifications UI
+- [ ] Create notification dropdown UI
+- [ ] Add notification badge in navbar
+- [ ] Create notification list page
+- [ ] Add notification item component
+- [ ] Design different notification types:
+  - dare accepted
+  - submission approved
+  - submission rejected
+  - reward received
+
+  ## Phase 10 — Wallet & Rewards UX
+- [ ] Improve wallet page UI/UX
+- [ ] Highlight earnings visually
+- [ ] Add transaction filters
+- [ ] Add reward animation (optional)
+- [ ] Add "pending vs available" clarity
+- [ ] Add empty wallet state
+
+## Phase 12 — SEO & Sharing
+- [ ] Add proper meta tags for pages
+- [ ] Add Open Graph tags for sharing
+- [ ] Create shareable dare preview pages
+- [ ] Optimize page titles and descriptions
+- [ ] Add basic sitemap setup
+
+## Phase 13 — Performance Optimization
+- [ ] Optimize images (Next Image)
+- [ ] Lazy load heavy components
+- [ ] Reduce unnecessary re-renders
+- [ ] Optimize bundle size
+- [ ] Test performance on mobile devices
+
+## Phase 14 — Final QA & Launch Prep
+- [ ] Test all user flows end-to-end
+- [ ] Fix UI inconsistencies
+- [ ] Fix edge cases
+- [ ] Test mobile thoroughly
+- [ ] Test slow network scenarios
+- [ ] Add basic error boundaries
+- [ ] Prepare landing page for traffic

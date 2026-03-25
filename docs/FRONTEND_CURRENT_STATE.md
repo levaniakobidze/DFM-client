@@ -1,48 +1,49 @@
 # Frontend Current State
 
 ## Status
-All 4 phases complete. Frontend MVP is ready for backend integration.
+Phase 5 complete. UI is polished and UX-refined. Ready for Phase 6 — Georgian Localization.
 
 ## What exists right now
 
 ### Infrastructure
-- `src/providers/QueryProvider.tsx` — TanStack Query client (staleTime 1min, retry 1)
-- `src/store/useAuthStore.ts` — Zustand auth store (user, isLoggedIn, login, logout)
-- `src/context/ToastContext.tsx` — Toast system (success / error / info)
+- `src/providers/QueryProvider.tsx` — TanStack Query
+- `src/store/useAuthStore.ts` — Zustand auth
+- `src/context/ToastContext.tsx` — Toast system
+- `src/services/` — dare.service.ts, wallet.service.ts (mock, swap-ready)
+- `src/hooks/` — useDares, useDare, useCreateDare, useWallet
 
-### Service Layer (swap-ready for real API)
-- `src/services/dare.service.ts` — fetchDares, fetchDareById, createDare, submitProof
-- `src/services/wallet.service.ts` — fetchWallet
-
-### Hooks
-- `src/hooks/useDares.ts` — useQuery for dares list with category filtering
-- `src/hooks/useDare.ts` — useQuery for single dare by id
-- `src/hooks/useCreateDare.ts` — useMutation + cache invalidation on success
-- `src/hooks/useWallet.ts` — useQuery for wallet data
-
-### Layout & Components
-- `src/components/layout/Header.tsx` — nav + auth state (Sign In / Sign Out via Zustand)
-- `src/components/layout/ProtectedRoute.tsx` — auth guard (demo Sign In button)
-- Full UI component library: Button, Card, Badge, SectionTitle, EmptyState, Skeleton, DareCard
+### UI Components (polished)
+- `Button` — active:scale-95 press effect, cursor-pointer, transition-all
+- `Card` — optional `hover` prop for lift effect on interactive cards
+- `DareCard` — hover lift, larger reward amount, divider before actions
+- `Skeleton` — shimmer animation (CSS gradient sweep) instead of plain pulse
+- `EmptyState` — larger icon, bolder title, more engaging layout
+- All components: consistent spacing, leading, and typography
 
 ### Pages
-- `/` — Landing page (server component, mock data)
-- `/feed` — useDares hook, sort, category filter, skeleton, error state
+- `/` — Landing: stronger hero with violet accent, icon-enhanced steps, emoji categories, larger CTAs
+- `/feed` — Horizontal scrollable chips on mobile, active:scale-95 on chips
 - `/feed/[id]` — useDare hook, skeleton while loading
-- `/create` — ProtectedRoute + useCreateDare mutation, loading state on button
-- `/profile` — static mock data (to be connected when user API is ready)
-- `/wallet` — ProtectedRoute + useWallet hook, skeleton loading
-- `/submit/[id]` — submitProof service, toast on success
+- `/create` — ProtectedRoute + useCreateDare mutation
+- `/profile` — Icon stats, active badge in header, better completed dare cards
+- `/wallet` — ProtectedRoute + useWallet hook
+- `/submit/[id]` — Polished success screen with reward preview and two action buttons
 
-## To connect backend (when ready)
-1. Replace service functions in `src/services/` with real fetch/axios calls
-2. Update `useAuthStore` login/logout to call auth API
-3. Point `ProtectedRoute` redirect to real `/login` page
-4. No hook or page logic needs to change
+### UX Micro-interactions
+- All buttons: press scale effect
+- DareCard: hover lift + shadow
+- Category chips on feed: shrink-0 for mobile scroll, active scale
+- Category links on landing: hover bg-violet-50 + border highlight
+
+## What is not done yet
+- Georgian localization (Phase 6)
+- Auth UI pages (Phase 7)
+- Dare interactions: likes, bookmarks, share (Phase 8)
+- Notifications UI (Phase 9)
+- Wallet UX improvements (Phase 10)
+- SEO / meta tags (Phase 12)
 
 ## Notes for AI
-- Do not rebuild existing infrastructure — hooks, services, and stores are in place
-- Use `useAuthStore` for auth state
-- Use `useToast` for feedback
-- Wrap protected pages with `<ProtectedRoute>`
-- Services are the only files that need changing for backend integration
+- Use `hover` prop on Card for interactive card surfaces
+- Shimmer is CSS-based via `.shimmer-effect` class in globals.css
+- Do not rebuild existing components — extend them

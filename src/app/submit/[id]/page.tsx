@@ -23,15 +23,21 @@ export default function SubmitPage({ params }: Props) {
 
   if (submitted) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <div className="text-4xl mb-4">⏳</div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Proof Submitted!</h2>
-        <p className="text-gray-500 mb-6">
-          Your proof is under review. You will be notified once it is approved.
+      <div className="max-w-md mx-auto px-4 py-20 text-center">
+        <div className="w-20 h-20 rounded-2xl bg-amber-50 flex items-center justify-center text-4xl mx-auto mb-6">
+          ⏳
+        </div>
+        <h2 className="text-2xl font-extrabold text-gray-900 mb-3">Proof Submitted!</h2>
+        <p className="text-gray-500 mb-2 leading-relaxed">
+          Your proof is now under review. The dare creator will check your submission and approve it.
         </p>
-        <Link href="/feed">
-          <Button>Back to Feed</Button>
-        </Link>
+        <p className="text-sm text-violet-600 font-medium mb-8">
+          Potential reward: <span className="text-amber-500 font-bold">${dare.reward.toFixed(2)}</span>
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link href="/feed"><Button variant="outline">Back to Feed</Button></Link>
+          <Link href="/profile"><Button>View My Activity</Button></Link>
+        </div>
       </div>
     );
   }

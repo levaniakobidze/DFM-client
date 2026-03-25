@@ -45,12 +45,12 @@ export default function FeedPage() {
 
       {/* Filters row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActive(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+              className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition-all active:scale-95 ${
                 active === cat
                   ? "bg-violet-600 text-white border-violet-600"
                   : "bg-white text-gray-600 border-gray-200 hover:border-violet-400 hover:text-violet-600"

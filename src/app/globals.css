@@ -7,3 +7,16 @@
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.shimmer-effect {
+  animation: shimmer 1.6s infinite;
+}
