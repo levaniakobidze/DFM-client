@@ -279,6 +279,36 @@ const en = {
     roleAdmin: "Admin",
     roleUser: "User",
   },
+  moderation: {
+    // Report modal
+    reportModalTitle: "Report this Dare",
+    reportModalSubtitle: "Help us keep DareMe safe and fun for everyone.",
+    reasonLabel: "What's the issue?",
+    reasonDangerous: "Dangerous or harmful content",
+    reasonInappropriate: "Inappropriate or offensive content",
+    reasonPrivacy: "Privacy concerns",
+    reasonSpam: "Spam or misleading",
+    reasonOther: "Other",
+    descriptionPlaceholder: "Add any extra details (optional)...",
+    // Submission status banner
+    submissionPending: "Submission Under Review",
+    submissionPendingDesc: "Your proof has been submitted and is being reviewed. You'll be notified once a decision is made.",
+    submissionApproved: "Submission Approved!",
+    submissionApprovedDesc: "Your proof was accepted. The reward has been added to your wallet.",
+    submissionRejected: "Submission Rejected",
+    submissionRejectedDesc: "Your proof didn't meet the requirements. Review the dare rules and try submitting again.",
+    viewWallet: "View Wallet",
+    tryAgain: "Submit Again",
+    // Flagged dare
+    flaggedNotice: "This dare is under moderation review",
+    flaggedDesc: "Our team is reviewing a report on this dare. You can still participate.",
+    underReview: "Under Review",
+    // Status badges
+    statusPending: "Pending",
+    statusApproved: "Approved",
+    statusRejected: "Rejected",
+    statusFlagged: "Flagged",
+  },
 };
 
 export default en;

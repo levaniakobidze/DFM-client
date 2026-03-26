@@ -95,6 +95,13 @@
 - [x] Add "pending vs available" clarity
 - [x] Add empty wallet state
 
+## Phase 11 — Moderation UI ✅
+- [x] Create report modal UI
+- [x] Create moderation dashboard (basic)
+- [x] Add "flagged content" UI
+- [x] Add approval/rejection UI for submissions
+- [x] Add moderation status badges
+
 ## Phase 12 — SEO & Sharing
 - [ ] Add proper meta tags for pages
 - [ ] Add Open Graph tags for sharing

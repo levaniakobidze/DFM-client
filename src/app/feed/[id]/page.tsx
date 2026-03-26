@@ -12,6 +12,7 @@ import Card from "@/components/ui/Card";
 import { CardSkeleton } from "@/components/ui/Skeleton";
 import DareInteractions from "@/components/dare/DareInteractions";
 import CommentSection from "@/components/dare/CommentSection";
+import SubmissionStatusBanner from "@/components/moderation/SubmissionStatusBanner";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -21,8 +22,11 @@ export default function DareDetailsPage({ params }: Props) {
   const { id } = use(params);
   const { t } = useLanguage();
   const { isLoggedIn } = useAuthStore();
-  const { acceptDare } = useInteractionStore();
+  const { acceptDare, reported, submissionStatuses } = useInteractionStore();
   const { data: dare, isLoading } = useDare(id);
+
+  const isFlagged = !!reported[id];
+  const submissionStatus = submissionStatuses[id];
 
   if (isLoading) {
     return (
@@ -54,6 +58,17 @@ export default function DareDetailsPage({ params }: Props) {
         {t.dareDetails.backToFeed}
       </Link>
 
+      {/* Flagged notice */}
+      {isFlagged && (
+        <div className="flex items-start gap-3 rounded-2xl border border-orange-200 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 p-4 mb-4">
+          <span className="text-xl shrink-0">⚠️</span>
+          <div>
+            <p className="text-sm font-semibold text-orange-700 dark:text-orange-400">{t.moderation.flaggedNotice}</p>
+            <p className="text-xs text-orange-600/80 dark:text-orange-400/70 mt-0.5">{t.moderation.flaggedDesc}</p>
+          </div>
+        </div>
+      )}
+
       {/* Main info */}
       <Card className="mb-4">
         <div className="flex items-center justify-between mb-4">
@@ -74,32 +89,39 @@ export default function DareDetailsPage({ params }: Props) {
       {/* Interactions: like, bookmark, share, report */}
       <DareInteractions dareId={dare.id} />
 
-      {/* Action */}
-      <Card className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-gray-900 dark:text-white">{t.dareDetails.readyTitle}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}
-            </p>
+      {/* Submission status banner (shown after submitting) */}
+      {submissionStatus && (
+        <SubmissionStatusBanner status={submissionStatus} dareId={dare.id} />
+      )}
+
+      {/* Action — hide if already submitted */}
+      {!submissionStatus && (
+        <Card className="mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-gray-900 dark:text-white">{t.dareDetails.readyTitle}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}
+              </p>
+            </div>
+            {isLoggedIn ? (
+              <Link href={`/submit/${dare.id}`} onClick={() => acceptDare(dare.id)}>
+                <Button size="lg">{t.dareDetails.acceptDare}</Button>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <Button size="lg">{t.dareDetails.acceptDare}</Button>
+              </Link>
+            )}
           </div>
-          {isLoggedIn ? (
-            <Link href={`/submit/${dare.id}`} onClick={() => acceptDare(dare.id)}>
-              <Button size="lg">{t.dareDetails.acceptDare}</Button>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <Button size="lg">{t.dareDetails.acceptDare}</Button>
-            </Link>
+          {!isLoggedIn && (
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-right">
+              <Link href="/login" className="text-violet-600 hover:underline font-medium">{t.nav.signIn}</Link>
+              {" "}{t.protected.desc.toLowerCase()}
+            </p>
           )}
-        </div>
-        {!isLoggedIn && (
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-right">
-            <Link href="/login" className="text-violet-600 hover:underline font-medium">{t.nav.signIn}</Link>
-            {" "}{t.protected.desc.toLowerCase()}
-          </p>
-        )}
-      </Card>
+        </Card>
+      )}
 
       {/* Comments */}
       <CommentSection dareId={dare.id} />

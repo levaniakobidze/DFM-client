@@ -4,8 +4,10 @@ import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import ModerationBadge from "@/components/moderation/ModerationBadge";
 import { Dare } from "@/lib/mock-data";
 import { useLanguage } from "@/context/LanguageContext";
+import { useInteractionStore } from "@/store/useInteractionStore";
 
 interface DareCardProps {
   dare: Dare;
@@ -13,12 +15,17 @@ interface DareCardProps {
 
 export default function DareCard({ dare }: DareCardProps) {
   const { t } = useLanguage();
+  const { reported } = useInteractionStore();
+  const isFlagged = !!reported[dare.id];
 
   return (
     <Card hover className="flex flex-col">
       <div className="flex items-start justify-between mb-3">
-        <Badge variant="category">{dare.category}</Badge>
-        <span className="text-xl font-extrabold text-amber-500 leading-none">${dare.reward.toFixed(2)}</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge variant="category">{dare.category}</Badge>
+          {isFlagged && <ModerationBadge status="flagged" />}
+        </div>
+        <span className="text-xl font-extrabold text-amber-500 leading-none shrink-0">${dare.reward.toFixed(2)}</span>
       </div>
       <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-snug">{dare.title}</h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-5 line-clamp-2 flex-1 leading-relaxed">{dare.description}</p>

@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { useToast } from "@/context/ToastContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useInteractionStore } from "@/store/useInteractionStore";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -20,6 +21,7 @@ export default function SubmitPage({ params }: Props) {
   const { id } = use(params);
   const { t } = useLanguage();
   const { showToast } = useToast();
+  const { submitDare } = useInteractionStore();
   const dare = mockDares.find((d) => d.id === id);
   const [submitted, setSubmitted] = useState(false);
 
@@ -69,6 +71,7 @@ export default function SubmitPage({ params }: Props) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          submitDare(id);
           showToast(t.submit.successTitle, "info");
           setSubmitted(true);
         }}
