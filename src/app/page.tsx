@@ -156,24 +156,74 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="relative bg-gray-50 dark:bg-gray-950 py-20">
+      <section className="relative overflow-hidden bg-gray-50 dark:bg-gray-950 py-20">
+        {/* Soft blobs so backdrop-blur on cards reads as real glass (blur needs contrast behind) */}
+        <div className="pointer-events-none absolute inset-0 hidden dark:block">
+          <div className="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-violet-600/25 blur-3xl" />
+          <div className="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-600/20 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-56 w-56 rounded-full bg-blue-600/15 blur-3xl" />
+        </div>
+        <div className="pointer-events-none absolute inset-0 block dark:hidden">
+          <div className="absolute top-16 left-1/3 h-56 w-56 rounded-full bg-violet-400/25 blur-3xl" />
+          <div className="absolute bottom-8 right-1/4 h-48 w-48 rounded-full bg-violet-300/20 blur-3xl" />
+        </div>
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-400/60 to-transparent" />
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="relative max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <SectionTitle title={t.landing.howItWorks} subtitle={t.landing.howSubtitle} />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="hidden md:block absolute top-14 left-[16.66%] right-[16.66%] h-px bg-linear-to-r from-violet-400/0 via-violet-400/45 to-violet-400/0" />
+            <div className="hidden md:block pointer-events-none absolute inset-0 z-20">
+              {/* Arrow 1: curved connector above gap 1-2 */}
+              <svg className="absolute top-3 left-[31%] w-24 h-14" viewBox="0 0 96 56" fill="none" aria-hidden="true">
+                <path
+                  d="M6 44 C24 12, 64 12, 88 34"
+                  stroke="rgb(34 197 94 / 0.9)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M80 26 L90 34 L78 38"
+                  stroke="rgb(34 197 94 / 0.9)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+
+              {/* Arrow 2: rounded wave above gap 2-3 */}
+              <svg className="absolute top-2 left-[63.5%] w-24 h-14" viewBox="0 0 96 56" fill="none" aria-hidden="true">
+                <path
+                  d="M6 34 C18 20, 28 44, 42 30 C56 16, 66 40, 82 28"
+                  stroke="rgb(34 197 94 / 0.9)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M74 20 L84 28 L72 32"
+                  stroke="rgb(34 197 94 / 0.9)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
             {t.landing.steps.map((s, i) => (
               <div
                 key={i}
-                className="relative group bg-white/80 dark:bg-gray-900/80 backdrop-blur rounded-2xl border border-gray-200 dark:border-gray-700 p-7 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-500/10"
+                className="relative z-10 group rounded-2xl border border-white/40 bg-white/55 p-7 text-center shadow-lg shadow-gray-900/10 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/60 hover:bg-white/70 hover:shadow-2xl hover:shadow-violet-500/15 dark:border-white/10 dark:bg-white/8 dark:shadow-black/40 dark:backdrop-blur-2xl dark:hover:border-white/15 dark:hover:bg-white/12"
               >
-                <div className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-violet-400/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="text-3xl mb-4">{s.icon}</div>
-                <div className="w-8 h-8 rounded-full bg-violet-600 text-white text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                <div className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-violet-400/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-900/35 text-3xl flex items-center justify-center mx-auto mb-4 shadow-inner shadow-violet-300/25 dark:shadow-violet-900/30">
+                  {s.icon}
+                </div>
+                <div className="w-8 h-8 rounded-full bg-violet-600 text-white text-xs font-bold flex items-center justify-center mx-auto mb-4 shadow-lg shadow-violet-500/35">
                   {i + 1}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{s.title}</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 leading-snug">{s.title}</h3>
                 <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed">{s.description}</p>
               </div>
             ))}
