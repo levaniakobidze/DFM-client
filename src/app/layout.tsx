@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { ToastProvider } from "@/context/ToastContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -13,9 +14,35 @@ const bpgGlaho = localFont({
   display: "swap",
 });
 
+const BASE_URL = "https://dareme.app";
+
 export const metadata: Metadata = {
-  title: "DareMe — Get paid to take on challenges",
-  description: "Browse, create and complete fun safe challenges for real rewards.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "DareMe — Get Paid to Take on Challenges",
+    template: "%s | DareMe",
+  },
+  description:
+    "Browse, create and complete fun safe challenges for real rewards. Join thousands of daring users and start earning today.",
+  keywords: ["dare", "challenges", "earn money", "rewards", "fun", "social", "DareMe"],
+  authors: [{ name: "DareMe" }],
+  openGraph: {
+    type: "website",
+    siteName: "DareMe",
+    title: "DareMe — Get Paid to Take on Challenges",
+    description:
+      "Browse, create and complete fun safe challenges for real rewards.",
+    url: BASE_URL,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "DareMe" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DareMe — Get Paid to Take on Challenges",
+    description:
+      "Browse, create and complete fun safe challenges for real rewards.",
+    images: ["/og.png"],
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -39,6 +66,7 @@ export default function RootLayout({
               <ToastProvider>
                 <Header />
                 <main className="flex-1">{children}</main>
+                <Footer />
               </ToastProvider>
             </QueryProvider>
           </LanguageProvider>

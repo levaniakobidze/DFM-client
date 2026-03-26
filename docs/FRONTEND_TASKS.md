@@ -102,12 +102,12 @@
 - [x] Add approval/rejection UI for submissions
 - [x] Add moderation status badges
 
-## Phase 12 — SEO & Sharing
-- [ ] Add proper meta tags for pages
-- [ ] Add Open Graph tags for sharing
-- [ ] Create shareable dare preview pages
-- [ ] Optimize page titles and descriptions
-- [ ] Add basic sitemap setup
+## Phase 12 — SEO & Sharing ✅
+- [x] Add proper meta tags for pages
+- [x] Add Open Graph tags for sharing
+- [x] Create shareable dare preview pages
+- [x] Optimize page titles and descriptions
+- [x] Add basic sitemap setup
 
 ## Phase 13 — Performance Optimization
 - [ ] Optimize images (Next Image)
