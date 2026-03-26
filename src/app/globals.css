@@ -2,12 +2,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --font-sans: var(--font-geist-sans);
-  --font-georgian: var(--font-noto-georgian);
+  --font-sans: var(--font-bpg-glaho);
 }
 
 body {
-  font-family: var(--font-sans), var(--font-georgian), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 @keyframes shimmer {

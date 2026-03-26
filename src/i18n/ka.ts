@@ -30,7 +30,7 @@ const ka: Translations = {
     viewAll: "ყველას ნახვა →",
     categories: "კატეგორიით ძიება",
     categoriesSubtitle: "უსაფრთხო, სახალისო და ყველასთვის.",
-    ctaTitle: "მზა ხარ გამოწვევისთვის?",
+    ctaTitle: "მზად ხარ გამოწვევისთვის?",
     ctaSubtext: "შემოგვიერთდი, დაიწყე გამომუშავება — ან შექმენი საკუთარი გამოწვევა.",
     categoryLabels: {
       Fun: "სახალისო",
@@ -61,7 +61,7 @@ const ka: Translations = {
     backToFeed: "← უკან ფიდში",
     postedBy: "განათავსა",
     proofRequired: "საჭირო მტკიცებულება",
-    readyTitle: "მზა ხარ გამოწვევისთვის?",
+    readyTitle: "მზად ხარ გამოწვევისთვის?",
     earn: "გამოიმუშავე",
     onCompletion: "შესრულებაზე.",
     acceptDare: "გამოწვევის მიღება",
