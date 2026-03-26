@@ -136,6 +136,15 @@ export default function Header() {
                   >
                     <span>💳</span> {t.nav.wallet}
                   </Link>
+                  {user?.role === "admin" && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
+                    >
+                      <span>🛡️</span> {t.admin.adminPanel}
+                    </Link>
+                  )}
                   <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
                   <button
                     onClick={() => { logout(); setDropdownOpen(false); }}
@@ -229,6 +238,12 @@ export default function Header() {
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                   {t.nav.notifications}
                 </Link>
+                {user?.role === "admin" && (
+                  <Link href="/admin" onClick={() => setMobileOpen(false)}
+                    className="text-sm font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors">
+                    🛡️ {t.admin.adminPanel}
+                  </Link>
+                )}
                 <Button variant="outline" size="sm" className="w-full" onClick={() => { logout(); setMobileOpen(false); }}>
                   {t.nav.signOut}
                 </Button>
