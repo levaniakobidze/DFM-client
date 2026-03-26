@@ -28,6 +28,7 @@ const ka: Translations = {
     featuredDares: "გამორჩეული გამოწვევები",
     featuredSubtitle: "შემოგვიერთდი და დაიწყე გამომუშავება.",
     viewAll: "ყველას ნახვა →",
+    view: "ნახვა",
     categories: "კატეგორიით ძიება",
     categoriesSubtitle: "უსაფრთხო, სახალისო და ყველასთვის.",
     ctaTitle: "მზად ხარ გამოწვევისთვის?",

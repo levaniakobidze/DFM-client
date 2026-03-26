@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useLanguage, Locale } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isLoggedIn, user, logout } = useAuthStore();
   const { t, locale, setLocale } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
@@ -21,6 +22,16 @@ export default function Header() {
   ];
 
   const toggleLocale = () => setLocale(locale === "en" ? "ka" : "en");
+
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 8);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -35,11 +46,22 @@ export default function Header() {
   const userInitial = user?.name?.charAt(0).toUpperCase() ?? "?";
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "backdrop-blur-xl bg-white/70 dark:bg-gray-900/65 border-b border-white/40 dark:border-gray-700/70 shadow-lg shadow-gray-900/10"
+          : "bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-violet-600 tracking-tight shrink-0">
+        <Link
+          href="/"
+          className={`font-bold text-violet-600 tracking-tight shrink-0 transition-all duration-300 ${
+            isScrolled ? "text-3xl" : "text-2xl"
+          }`}
+        >
           DareMe
         </Link>
 

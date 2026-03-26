@@ -26,6 +26,7 @@ const en = {
     featuredDares: "Featured Dares",
     featuredSubtitle: "Jump in and start earning.",
     viewAll: "View all →",
+    view: "View",
     categories: "Browse by Category",
     categoriesSubtitle: "Safe, fun, and for everyone.",
     ctaTitle: "Ready to take the dare?",
