@@ -3,10 +3,11 @@
 
 :root {
   --font-sans: var(--font-geist-sans);
+  --font-georgian: var(--font-noto-georgian);
 }
 
 body {
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), var(--font-georgian), system-ui, sans-serif;
 }
 
 @keyframes shimmer {

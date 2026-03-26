@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Noto_Sans_Georgian } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { ToastProvider } from "@/context/ToastContext";
@@ -10,6 +10,13 @@ import QueryProvider from "@/providers/QueryProvider";
 const geist = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const notoGeorgian = Noto_Sans_Georgian({
+  variable: "--font-noto-georgian",
+  subsets: ["georgian"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} ${notoGeorgian.variable} h-full antialiased`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
