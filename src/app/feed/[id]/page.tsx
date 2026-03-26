@@ -5,10 +5,13 @@ import Link from "next/link";
 import { useDare } from "@/hooks/useDare";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useInteractionStore } from "@/store/useInteractionStore";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { CardSkeleton } from "@/components/ui/Skeleton";
+import DareInteractions from "@/components/dare/DareInteractions";
+import CommentSection from "@/components/dare/CommentSection";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -18,6 +21,7 @@ export default function DareDetailsPage({ params }: Props) {
   const { id } = use(params);
   const { t } = useLanguage();
   const { isLoggedIn } = useAuthStore();
+  const { acceptDare } = useInteractionStore();
   const { data: dare, isLoading } = useDare(id);
 
   if (isLoading) {
@@ -67,8 +71,11 @@ export default function DareDetailsPage({ params }: Props) {
         <p className="text-sm text-gray-600">{dare.proofRequirement}</p>
       </Card>
 
+      {/* Interactions: like, bookmark, share, report */}
+      <DareInteractions dareId={dare.id} />
+
       {/* Action */}
-      <Card>
+      <Card className="mb-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold text-gray-900">{t.dareDetails.readyTitle}</p>
@@ -77,7 +84,7 @@ export default function DareDetailsPage({ params }: Props) {
             </p>
           </div>
           {isLoggedIn ? (
-            <Link href={`/submit/${dare.id}`}>
+            <Link href={`/submit/${dare.id}`} onClick={() => acceptDare(dare.id)}>
               <Button size="lg">{t.dareDetails.acceptDare}</Button>
             </Link>
           ) : (
@@ -93,6 +100,9 @@ export default function DareDetailsPage({ params }: Props) {
           </p>
         )}
       </Card>
+
+      {/* Comments */}
+      <CommentSection dareId={dare.id} />
     </div>
   );
 }

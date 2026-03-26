@@ -1,16 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import DareCard from "@/components/dare/DareCard";
 import { mockDares } from "@/lib/mock-data";
 import { useLanguage } from "@/context/LanguageContext";
+import { useInteractionStore } from "@/store/useInteractionStore";
 
 export default function ProfilePage() {
   const { t } = useLanguage();
+  const { accepted } = useInteractionStore();
   const createdDares = mockDares.slice(0, 2);
   const completedDares = mockDares.slice(2, 4);
+  const acceptedDares = mockDares.filter((d) => accepted.includes(d.id));
 
   const stats = [
     { label: t.profile.statsCreated, value: "8", icon: "🎯" },
@@ -78,6 +83,28 @@ export default function ProfilePage() {
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Accepted dares */}
+      <div>
+        <SectionTitle title={t.profile.acceptedDares} subtitle={t.profile.acceptedSubtitle} className="mb-4" />
+        {acceptedDares.length === 0 ? (
+          <Card>
+            <div className="flex flex-col items-center py-6 gap-3">
+              <span className="text-3xl">🎯</span>
+              <p className="text-sm text-gray-500 text-center">{t.profile.noAccepted}</p>
+              <Link href="/feed">
+                <Button size="sm" variant="outline">Browse Dares</Button>
+              </Link>
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {acceptedDares.map((dare) => (
+              <DareCard key={dare.id} dare={dare} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Recent activity */}

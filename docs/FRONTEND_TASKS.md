@@ -68,13 +68,13 @@
 - [x] Add user session indicator in navbar
 - [x] Add logout flow UI
 
-## Phase 8 — Dare Interaction Enhancements
-- [ ] Add like/reaction system to dares
-- [ ] Add comment UI (optional MVP-lite)
-- [ ] Add "save/bookmark dare" feature
-- [ ] Add share functionality (copy link, social)
-- [ ] Add "report dare" UI
-- [ ] Add "my accepted dares" section
+## Phase 8 — Dare Interaction Enhancements ✅
+- [x] Add like/reaction system to dares
+- [x] Add comment UI (optional MVP-lite)
+- [x] Add "save/bookmark dare" feature
+- [x] Add share functionality (copy link, social)
+- [x] Add "report dare" UI
+- [x] Add "my accepted dares" section
 
 ## Phase 9 — Notifications UI
 - [ ] Create notification dropdown UI
