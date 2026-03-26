@@ -48,29 +48,29 @@ export default function CommentSection({ dareId }: Props) {
 
   return (
     <Card className="mb-4">
-      <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
         <span>💬</span>
         <span>{t.interactions.comments}</span>
         {allComments.length > 0 && (
-          <span className="text-xs text-gray-400 font-normal">({allComments.length})</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500 font-normal">({allComments.length})</span>
         )}
       </h2>
 
       {allComments.length === 0 ? (
-        <p className="text-sm text-gray-400 italic mb-4">{t.interactions.noComments}</p>
+        <p className="text-sm text-gray-400 dark:text-gray-500 italic mb-4">{t.interactions.noComments}</p>
       ) : (
         <ul className="space-y-4 mb-4">
           {allComments.map((c) => (
             <li key={c.id} className="flex gap-3">
-              <div className="w-8 h-8 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {c.author[0]}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-sm font-semibold text-gray-900">{c.author}</span>
-                  <span className="text-xs text-gray-400">{c.time}</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">{c.author}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{c.time}</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-0.5">{c.text}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{c.text}</p>
               </div>
             </li>
           ))}
@@ -85,7 +85,7 @@ export default function CommentSection({ dareId }: Props) {
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handlePost()}
             placeholder={t.interactions.commentPlaceholder}
-            className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-300"
+            className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-300"
           />
           <button
             onClick={handlePost}
@@ -96,7 +96,7 @@ export default function CommentSection({ dareId }: Props) {
           </button>
         </div>
       ) : (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-gray-400 dark:text-gray-500">
           <Link href="/login" className="text-violet-600 hover:underline font-medium">
             {t.nav.signIn}
           </Link>

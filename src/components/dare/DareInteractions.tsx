@@ -65,8 +65,8 @@ export default function DareInteractions({ dareId }: Props) {
           onClick={handleLike}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
             isLiked
-              ? "bg-rose-50 text-rose-500 border border-rose-200"
-              : "bg-gray-50 text-gray-500 border border-gray-200 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200"
+              ? "bg-rose-50 dark:bg-rose-900/30 text-rose-500 border border-rose-200 dark:border-rose-700"
+              : "bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-500 hover:border-rose-200 dark:hover:border-rose-700"
           }`}
         >
           <span>{isLiked ? "❤️" : "🤍"}</span>
@@ -79,8 +79,8 @@ export default function DareInteractions({ dareId }: Props) {
           onClick={handleBookmark}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
             isBookmarked
-              ? "bg-violet-50 text-violet-600 border border-violet-200"
-              : "bg-gray-50 text-gray-500 border border-gray-200 hover:bg-violet-50 hover:text-violet-600 hover:border-violet-200"
+              ? "bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 border border-violet-200 dark:border-violet-700"
+              : "bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-violet-50 dark:hover:bg-violet-900/30 hover:text-violet-600 hover:border-violet-200"
           }`}
         >
           <span>🔖</span>
@@ -90,7 +90,7 @@ export default function DareInteractions({ dareId }: Props) {
         {/* Share */}
         <button
           onClick={handleShare}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-50 text-gray-500 border border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 hover:border-blue-200 transition-colors"
         >
           <span>🔗</span>
           <span>{t.interactions.share}</span>
@@ -102,8 +102,8 @@ export default function DareInteractions({ dareId }: Props) {
           disabled={isReported}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ml-auto ${
             isReported
-              ? "bg-gray-50 text-gray-400 border border-gray-200 cursor-not-allowed"
-              : "bg-gray-50 text-gray-400 border border-gray-200 hover:bg-red-50 hover:text-red-500 hover:border-red-200"
+              ? "bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-200 dark:border-gray-600 cursor-not-allowed"
+              : "bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-500 hover:border-red-200"
           }`}
         >
           <span>🚩</span>
@@ -113,10 +113,10 @@ export default function DareInteractions({ dareId }: Props) {
 
       {/* Inline report form */}
       {showReport && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-xl">
-          <p className="text-sm font-semibold text-red-700 mb-2">{t.interactions.reportTitle}</p>
+        <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-xl">
+          <p className="text-sm font-semibold text-red-700 dark:text-red-400 mb-2">{t.interactions.reportTitle}</p>
           <textarea
-            className="w-full text-sm border border-red-200 rounded-lg p-2.5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-300 resize-none bg-white"
+            className="w-full text-sm border border-red-200 dark:border-red-700 rounded-lg p-2.5 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-300 resize-none bg-white dark:bg-gray-800"
             rows={3}
             value={reportText}
             onChange={(e) => setReportText(e.target.value)}
@@ -124,11 +124,8 @@ export default function DareInteractions({ dareId }: Props) {
           />
           <div className="flex gap-2 mt-2 justify-end">
             <button
-              onClick={() => {
-                setShowReport(false);
-                setReportText("");
-              }}
-              className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              onClick={() => { setShowReport(false); setReportText(""); }}
+              className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               {t.interactions.reportCancel}
             </button>

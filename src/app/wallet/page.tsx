@@ -40,8 +40,8 @@ function WalletContent() {
       <Card>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-semibold text-gray-900">{t.wallet.pendingRewards}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{t.wallet.pendingSubtext}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">{t.wallet.pendingRewards}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t.wallet.pendingSubtext}</p>
           </div>
           <span className="text-2xl font-bold text-amber-500">${data.pending.toFixed(2)}</span>
         </div>
@@ -51,14 +51,14 @@ function WalletContent() {
       <div>
         <SectionTitle title={t.wallet.transactionHistory} className="mb-4" />
         <Card padding={false}>
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
             {data.transactions.map((tx) => (
               <li key={tx.id} className="flex items-center justify-between px-5 py-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{tx.label}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{tx.date}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{tx.label}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{tx.date}</p>
                 </div>
-                <span className={`text-sm font-semibold ${tx.amount > 0 ? "text-green-600" : "text-red-500"}`}>
+                <span className={`text-sm font-semibold ${tx.amount > 0 ? "text-green-600 dark:text-green-400" : "text-red-500"}`}>
                   {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toFixed(2)}
                 </span>
               </li>

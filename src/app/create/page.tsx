@@ -13,6 +13,8 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const categories: DareCategory[] = ["Fun", "Social", "Creative", "Video", "Public"];
 
+const inputClass = "w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
+
 function CreateDareForm() {
   const { t } = useLanguage();
   const { showToast } = useToast();
@@ -32,8 +34,8 @@ function CreateDareForm() {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
         <div className="text-4xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.createDare.successTitle}</h2>
-        <p className="text-gray-500 mb-6">{t.createDare.successText}</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.createDare.successTitle}</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">{t.createDare.successText}</p>
         <div className="flex gap-3 justify-center">
           <Button variant="outline" onClick={() => setSubmitted(false)}>{t.createDare.postAnother}</Button>
           <Link href="/feed"><Button>{t.createDare.browseFeed}</Button></Link>
@@ -77,34 +79,22 @@ function CreateDareForm() {
 
         {/* Basic info */}
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-4">{t.createDare.basicInfo}</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.createDare.basicInfo}</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t.createDare.titleLabel}</label>
-              <input
-                name="title"
-                type="text"
-                required
-                placeholder={t.createDare.titlePlaceholder}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
-              />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.createDare.titleLabel}</label>
+              <input name="title" type="text" required placeholder={t.createDare.titlePlaceholder} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t.createDare.descLabel}</label>
-              <textarea
-                name="description"
-                required
-                rows={3}
-                placeholder={t.createDare.descPlaceholder}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-              />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.createDare.descLabel}</label>
+              <textarea name="description" required rows={3} placeholder={t.createDare.descPlaceholder} className={`${inputClass} resize-none`} />
             </div>
           </div>
         </Card>
 
         {/* Category */}
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-4">{t.createDare.category}</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.createDare.category}</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -114,7 +104,7 @@ function CreateDareForm() {
                 className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategory === cat
                     ? "bg-violet-600 text-white border-violet-600"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-violet-400 hover:text-violet-600"
+                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-violet-400 hover:text-violet-600"
                 }`}
               >
                 {categoryLabels[cat]}
@@ -125,30 +115,17 @@ function CreateDareForm() {
 
         {/* Reward */}
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-4">{t.createDare.rewardAmount}</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.createDare.rewardAmount}</h3>
           <div className="relative max-w-xs">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
-            <input
-              name="reward"
-              type="number"
-              required
-              min="1"
-              placeholder="0.00"
-              className="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
-            />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 font-medium">$</span>
+            <input name="reward" type="number" required min="1" placeholder="0.00" className={`${inputClass} pl-7`} />
           </div>
         </Card>
 
         {/* Proof requirement */}
         <Card>
-          <h3 className="font-semibold text-gray-900 mb-4">{t.createDare.proofReq}</h3>
-          <textarea
-            name="proofRequirement"
-            required
-            rows={2}
-            placeholder={t.createDare.proofPlaceholder}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-          />
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.createDare.proofReq}</h3>
+          <textarea name="proofRequirement" required rows={2} placeholder={t.createDare.proofPlaceholder} className={`${inputClass} resize-none`} />
         </Card>
 
         <Button type="submit" size="lg" className="w-full" disabled={isPending}>

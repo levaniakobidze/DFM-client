@@ -64,7 +64,7 @@ export default function FeedPage() {
               className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition-all active:scale-95 ${
                 active === cat
                   ? "bg-violet-600 text-white border-violet-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-violet-400 hover:text-violet-600"
+                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400"
               }`}
             >
               {categoryLabels[cat]}
@@ -75,7 +75,7 @@ export default function FeedPage() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortOption)}
-          className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 shrink-0"
+          className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-violet-500 shrink-0"
         >
           <option value="newest">{t.feed.sortNewest}</option>
           <option value="reward-high">{t.feed.sortHighest}</option>

@@ -60,15 +60,15 @@ export default function DareDetailsPage({ params }: Props) {
           <Badge variant="category">{dare.category}</Badge>
           <span className="text-2xl font-bold text-amber-500">${dare.reward.toFixed(2)}</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-3">{dare.title}</h1>
-        <p className="text-gray-600 leading-relaxed mb-4">{dare.description}</p>
-        <p className="text-xs text-gray-400">{t.dareDetails.postedBy} {dare.createdBy}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">{dare.title}</h1>
+        <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{dare.description}</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">{t.dareDetails.postedBy} {dare.createdBy}</p>
       </Card>
 
       {/* Proof requirement */}
       <Card className="mb-4">
-        <h2 className="font-semibold text-gray-900 mb-2">{t.dareDetails.proofRequired}</h2>
-        <p className="text-sm text-gray-600">{dare.proofRequirement}</p>
+        <h2 className="font-semibold text-gray-900 dark:text-white mb-2">{t.dareDetails.proofRequired}</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400">{dare.proofRequirement}</p>
       </Card>
 
       {/* Interactions: like, bookmark, share, report */}
@@ -78,8 +78,8 @@ export default function DareDetailsPage({ params }: Props) {
       <Card className="mb-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-semibold text-gray-900">{t.dareDetails.readyTitle}</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-semibold text-gray-900 dark:text-white">{t.dareDetails.readyTitle}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}
             </p>
           </div>
@@ -94,7 +94,7 @@ export default function DareDetailsPage({ params }: Props) {
           )}
         </div>
         {!isLoggedIn && (
-          <p className="text-xs text-gray-400 mt-3 text-right">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-right">
             <Link href="/login" className="text-violet-600 hover:underline font-medium">{t.nav.signIn}</Link>
             {" "}{t.protected.desc.toLowerCase()}
           </p>

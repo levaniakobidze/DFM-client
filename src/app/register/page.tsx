@@ -9,6 +9,8 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const DEMO_USER = { id: "1", name: "Alex M.", email: "alex@example.com" };
 
+const inputClass = "w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-shadow";
+
 export default function RegisterPage() {
   const { t } = useLanguage();
   const { login } = useAuthStore();
@@ -25,7 +27,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 bg-gray-50">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-950">
       <div className="w-full max-w-sm">
 
         {/* Header */}
@@ -33,51 +35,33 @@ export default function RegisterPage() {
           <Link href="/" className="text-2xl font-extrabold text-violet-600 tracking-tight">
             DareMe
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 mt-4 mb-1">{t.auth.registerTitle}</h1>
-          <p className="text-sm text-gray-500">{t.auth.registerSubtitle}</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-4 mb-1">{t.auth.registerTitle}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t.auth.registerSubtitle}</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t.auth.nameLabel}
               </label>
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder={t.auth.namePlaceholder}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition-shadow"
-              />
+              <input type="text" name="name" required placeholder={t.auth.namePlaceholder} className={inputClass} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t.auth.emailLabel}
               </label>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder={t.auth.emailPlaceholder}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition-shadow"
-              />
+              <input type="email" name="email" required placeholder={t.auth.emailPlaceholder} className={inputClass} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t.auth.passwordLabel}
               </label>
-              <input
-                type="password"
-                name="password"
-                required
-                placeholder={t.auth.passwordPlaceholder}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition-shadow"
-              />
+              <input type="password" name="password" required placeholder={t.auth.passwordPlaceholder} className={inputClass} />
             </div>
 
             <Button type="submit" size="lg" className="w-full mt-2" disabled={isPending}>
@@ -86,14 +70,12 @@ export default function RegisterPage() {
 
           </form>
 
-          {/* Demo note */}
-          <p className="text-center text-xs text-gray-400 mt-5 pt-5 border-t border-gray-100">
+          <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-5 pt-5 border-t border-gray-100 dark:border-gray-700">
             {t.auth.demoNote}
           </p>
         </div>
 
-        {/* Footer link */}
-        <p className="text-center text-sm text-gray-500 mt-5">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-5">
           {t.auth.haveAccount}{" "}
           <Link href="/login" className="text-violet-600 font-semibold hover:text-violet-700 transition-colors">
             {t.auth.signInLink}

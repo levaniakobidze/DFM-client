@@ -36,12 +36,12 @@ export default function ProfilePage() {
       {/* Profile header */}
       <Card>
         <div className="flex items-center gap-5">
-          <div className="w-16 h-16 rounded-2xl bg-violet-100 text-violet-600 flex items-center justify-center text-2xl font-extrabold flex-shrink-0">
+          <div className="w-16 h-16 rounded-2xl bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 flex items-center justify-center text-2xl font-extrabold flex-shrink-0">
             A
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold text-gray-900">Alex M.</h1>
-            <p className="text-sm text-gray-500">{t.profile.memberSince} March 2026</p>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Alex M.</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t.profile.memberSince} March 2026</p>
           </div>
           <Badge variant="success" className="shrink-0">{t.profile.active}</Badge>
         </div>
@@ -52,8 +52,8 @@ export default function ProfilePage() {
         {stats.map((stat) => (
           <Card key={stat.label} className="text-center">
             <div className="text-2xl mb-1">{stat.icon}</div>
-            <p className="text-2xl font-extrabold text-gray-900">{stat.value}</p>
-            <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+            <p className="text-2xl font-extrabold text-gray-900 dark:text-white">{stat.value}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.label}</p>
           </Card>
         ))}
       </div>
@@ -78,7 +78,7 @@ export default function ProfilePage() {
                 <Badge variant="category">{dare.category}</Badge>
                 <Badge variant="success">{t.profile.completed}</Badge>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2 leading-snug">{dare.title}</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 leading-snug">{dare.title}</h3>
               <p className="text-base font-bold text-amber-500">+${dare.reward.toFixed(2)} {t.profile.earned}</p>
             </Card>
           ))}
@@ -92,7 +92,7 @@ export default function ProfilePage() {
           <Card>
             <div className="flex flex-col items-center py-6 gap-3">
               <span className="text-3xl">🎯</span>
-              <p className="text-sm text-gray-500 text-center">{t.profile.noAccepted}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center">{t.profile.noAccepted}</p>
               <Link href="/feed">
                 <Button size="sm" variant="outline">Browse Dares</Button>
               </Link>
@@ -111,16 +111,16 @@ export default function ProfilePage() {
       <div>
         <SectionTitle title={t.profile.recentActivity} className="mb-4" />
         <Card padding={false}>
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
             {recentActivity.map((item) => (
               <li key={item.id} className="flex items-center justify-between px-5 py-4 gap-4">
                 <div className="flex items-center gap-3 min-w-0">
                   <Badge variant={item.type} className="shrink-0">
                     {item.type === "success" ? t.profile.activityDone : item.type === "pending" ? t.profile.activityPending : t.profile.activityNew}
                   </Badge>
-                  <p className="text-sm text-gray-700 truncate">{item.label}</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 truncate">{item.label}</p>
                 </div>
-                <p className="text-xs text-gray-400 shrink-0">{item.time}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 shrink-0">{item.time}</p>
               </li>
             ))}
           </ul>
