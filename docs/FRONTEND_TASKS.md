@@ -87,13 +87,13 @@
   - submission rejected
   - reward received
 
-  ## Phase 10 — Wallet & Rewards UX
-- [ ] Improve wallet page UI/UX
-- [ ] Highlight earnings visually
-- [ ] Add transaction filters
-- [ ] Add reward animation (optional)
-- [ ] Add "pending vs available" clarity
-- [ ] Add empty wallet state
+  ## Phase 10 — Wallet & Rewards UX ✅
+- [x] Improve wallet page UI/UX
+- [x] Highlight earnings visually
+- [x] Add transaction filters
+- [x] Add reward animation (optional)
+- [x] Add "pending vs available" clarity
+- [x] Add empty wallet state
 
 ## Phase 12 — SEO & Sharing
 - [ ] Add proper meta tags for pages
