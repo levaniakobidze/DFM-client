@@ -9,6 +9,12 @@ const en = {
     signOut: "Sign Out",
     getStarted: "Get Started",
   },
+  footer: {
+    privacy: "Privacy Policy",
+    terms: "Terms & Conditions",
+    tagline: "Built for safe and fun challenges.",
+    rights: "All rights reserved.",
+  },
   landing: {
     badge: "🔥 Live challenges available right now",
     headline1: "Dare someone.",
