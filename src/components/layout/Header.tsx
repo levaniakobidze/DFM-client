@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
+import NotificationDropdown from "@/components/notifications/NotificationDropdown";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,6 +93,9 @@ export default function Header() {
               </svg>
             )}
           </button>
+
+          {/* Notification bell (logged-in only) */}
+          {isLoggedIn && <NotificationDropdown />}
 
           {/* Language toggle */}
           <button
@@ -220,6 +224,10 @@ export default function Header() {
                 <Link href="/wallet" onClick={() => setMobileOpen(false)}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                   {t.nav.wallet}
+                </Link>
+                <Link href="/notifications" onClick={() => setMobileOpen(false)}
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  {t.nav.notifications}
                 </Link>
                 <Button variant="outline" size="sm" className="w-full" onClick={() => { logout(); setMobileOpen(false); }}>
                   {t.nav.signOut}

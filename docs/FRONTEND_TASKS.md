@@ -76,12 +76,12 @@
 - [x] Add "report dare" UI
 - [x] Add "my accepted dares" section
 
-## Phase 9 — Notifications UI
-- [ ] Create notification dropdown UI
-- [ ] Add notification badge in navbar
-- [ ] Create notification list page
-- [ ] Add notification item component
-- [ ] Design different notification types:
+## Phase 9 — Notifications UI ✅
+- [x] Create notification dropdown UI
+- [x] Add notification badge in navbar
+- [x] Create notification list page
+- [x] Add notification item component
+- [x] Design different notification types:
   - dare accepted
   - submission approved
   - submission rejected
