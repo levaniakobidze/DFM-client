@@ -1,11 +1,14 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useDare } from "@/hooks/useDare";
+import { useAcceptDare } from "@/hooks/useAcceptDare";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useInteractionStore } from "@/store/useInteractionStore";
+import { useToast } from "@/context/ToastContext";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -22,8 +25,33 @@ export default function DareDetailsPage({ params }: Props) {
   const { id } = use(params);
   const { t } = useLanguage();
   const { isLoggedIn } = useAuthStore();
-  const { acceptDare, reported, submissionStatuses } = useInteractionStore();
+  const { acceptDare, accepted, reported, submissionStatuses } = useInteractionStore();
+  const { showToast } = useToast();
   const { data: dare, isLoading } = useDare(id);
+  const { mutate: doAccept, isPending: isAccepting } = useAcceptDare();
+  const router = useRouter();
+  const [acceptError, setAcceptError] = useState<string | null>(null);
+
+  function handleAcceptDare() {
+    setAcceptError(null);
+    doAccept(id, {
+      onSuccess: (acceptance) => {
+        acceptDare(id, acceptance.id);
+        router.push(`/submit/${id}`);
+      },
+      onError: (err) => {
+        const msg = err instanceof Error ? err.message : "Failed to accept dare";
+        // Already accepted — still navigate to submit; acceptanceId may be in store
+        if (msg.includes("already accepted")) {
+          acceptDare(id);
+          router.push(`/submit/${id}`);
+          return;
+        }
+        setAcceptError(msg);
+        showToast(msg, "error");
+      },
+    });
+  }
 
   const isFlagged = !!reported[id];
   const submissionStatus = submissionStatuses[id];
@@ -105,9 +133,13 @@ export default function DareDetailsPage({ params }: Props) {
               </p>
             </div>
             {isLoggedIn ? (
-              <Link href={`/submit/${dare.id}`} onClick={() => acceptDare(dare.id)}>
-                <Button size="lg">{t.dareDetails.acceptDare}</Button>
-              </Link>
+              <Button
+                size="lg"
+                onClick={handleAcceptDare}
+                disabled={isAccepting || accepted.includes(id)}
+              >
+                {isAccepting ? "Accepting..." : accepted.includes(id) ? "Accepted" : t.dareDetails.acceptDare}
+              </Button>
             ) : (
               <Link href="/login">
                 <Button size="lg">{t.dareDetails.acceptDare}</Button>

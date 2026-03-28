@@ -115,14 +115,7 @@ export interface CreateDareInput {
   proofRequirement: string;
 }
 
-export async function createDare(input: CreateDareInput): Promise<Dare> {
-  // TODO (Phase 8): replace creatorId with the authenticated user's ID from the auth store
-  const creatorId = process.env.NEXT_PUBLIC_DEV_CREATOR_ID;
-
-  if (!creatorId) {
-    throw new Error("No creator ID available. Set NEXT_PUBLIC_DEV_CREATOR_ID or complete Phase 8 auth.");
-  }
-
+export async function createDare(input: CreateDareInput, creatorId: string): Promise<Dare> {
   const dare = await api.post<BackendDare>("/dares", {
     creatorId,
     title: input.title,
@@ -133,13 +126,4 @@ export async function createDare(input: CreateDareInput): Promise<Dare> {
   });
 
   return toFrontendDare(dare);
-}
-
-export interface SubmitProofInput {
-  dareId: string;
-  notes: string;
-}
-
-export async function submitProof(_input: SubmitProofInput): Promise<void> {
-  // POST /api/submissions — implement in Phase 5
 }

@@ -95,6 +95,7 @@ const ka: Translations = {
     successText: "შენი გამოწვევა ახლა ხელმისაწვდომია.",
     postAnother: "კიდევ ერთის შექმნა",
     browseFeed: "ფიდის დათვალიერება",
+    postFailed: "გამოწვევის გამოქვეყნება ვერ მოხერხდა. შეამოწმე კავშირი და სცადე თავიდან.",
   },
   profile: {
     memberSince: "წევრია",
@@ -212,8 +213,8 @@ const ka: Translations = {
     haveAccount: "უკვე გაქვს ანგარიში?",
     signUpLink: "რეგისტრაცია",
     signInLink: "შესვლა",
-    demoNote: "დემო რეჟიმი — ნებისმიერი მონაცემი გამოდგება",
-    forgotPassword: "დაგავიწყდა პაროლი?",
+    signInWithGoogle: "Google-ით შესვლა",
+    signUpWithGoogle: "Google-ით რეგისტრაცია",
   },
   admin: {
     title: "ადმინის პანელი",

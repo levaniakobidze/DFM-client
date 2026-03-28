@@ -7,6 +7,7 @@ import { ToastProvider } from "@/context/ToastContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import QueryProvider from "@/providers/QueryProvider";
+import AuthProvider from "@/providers/AuthProvider";
 
 const bpgGlaho = localFont({
   src: "../../public/fonts/bpg_glaho.ttf",
@@ -63,11 +64,13 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <QueryProvider>
-              <ToastProvider>
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </ToastProvider>
+              <AuthProvider>
+                <ToastProvider>
+                  <Header />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                </ToastProvider>
+              </AuthProvider>
             </QueryProvider>
           </LanguageProvider>
         </ThemeProvider>

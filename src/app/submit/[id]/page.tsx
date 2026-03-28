@@ -2,28 +2,46 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import { mockDares } from "@/lib/mock-data";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import { useToast } from "@/context/ToastContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useInteractionStore } from "@/store/useInteractionStore";
+import { useDare } from "@/hooks/useDare";
+import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+import { CardSkeleton } from "@/components/ui/Skeleton";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-const inputClass = "w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
+const inputClass =
+  "w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
 
-export default function SubmitPage({ params }: Props) {
-  const { id } = use(params);
+function SubmitForm({ dareId }: { dareId: string }) {
   const { t } = useLanguage();
   const { showToast } = useToast();
-  const { submitDare } = useInteractionStore();
-  const dare = mockDares.find((d) => d.id === id);
+  const { user } = useAuthStore();
+  const { acceptanceIds, submitDare } = useInteractionStore();
+  const { data: dare, isLoading } = useDare(dareId);
+  const { mutate: submit, isPending } = useCreateSubmission();
   const [submitted, setSubmitted] = useState(false);
+  const [note, setNote] = useState("");
+
+  const acceptanceId = acceptanceIds[dareId];
+
+  if (isLoading) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-10 space-y-5">
+        <CardSkeleton />
+        <CardSkeleton />
+      </div>
+    );
+  }
 
   if (!dare) return null;
 
@@ -46,10 +64,38 @@ export default function SubmitPage({ params }: Props) {
     );
   }
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (!user) {
+      showToast("You must be signed in to submit.", "error");
+      return;
+    }
+
+    if (!acceptanceId) {
+      showToast("Go back to the dare and click Accept first.", "error");
+      return;
+    }
+
+    submit(
+      { acceptanceId, userId: user.id, note: note || undefined },
+      {
+        onSuccess: () => {
+          submitDare(dareId);
+          setSubmitted(true);
+        },
+        onError: (err) => {
+          const msg = err instanceof Error ? err.message : "Submission failed";
+          showToast(msg, "error");
+        },
+      }
+    );
+  }
+
   return (
     <div className="max-w-xl mx-auto px-4 py-10 space-y-5">
       <Link
-        href={`/feed/${dare.id}`}
+        href={`/feed/${dareId}`}
         className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors inline-block"
       >
         {t.submit.backToDare}
@@ -67,16 +113,15 @@ export default function SubmitPage({ params }: Props) {
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{dare.proofRequirement}</p>
       </Card>
 
+      {!acceptanceId && (
+        <div className="rounded-xl border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+          You need to accept this dare before submitting.{" "}
+          <Link href={`/feed/${dareId}`} className="font-semibold underline">Go back and accept it.</Link>
+        </div>
+      )}
+
       {/* Upload form */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitDare(id);
-          showToast(t.submit.successTitle, "info");
-          setSubmitted(true);
-        }}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Card>
           <h3 className="font-semibold text-gray-900 dark:text-white mb-3">{t.submit.uploadFile}</h3>
           <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-xl py-10 cursor-pointer hover:border-violet-400 dark:hover:border-violet-500 transition-colors">
@@ -89,11 +134,33 @@ export default function SubmitPage({ params }: Props) {
 
         <Card>
           <h3 className="font-semibold text-gray-900 dark:text-white mb-3">{t.submit.notes}</h3>
-          <textarea rows={3} placeholder={t.submit.notesPlaceholder} className={`${inputClass} resize-none`} />
+          <textarea
+            rows={3}
+            placeholder={t.submit.notesPlaceholder}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className={`${inputClass} resize-none`}
+          />
         </Card>
 
-        <Button type="submit" size="lg" className="w-full">{t.submit.submit}</Button>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={isPending || !acceptanceId}
+        >
+          {isPending ? "Submitting..." : t.submit.submit}
+        </Button>
       </form>
     </div>
+  );
+}
+
+export default function SubmitPage({ params }: Props) {
+  const { id } = use(params);
+  return (
+    <ProtectedRoute>
+      <SubmitForm dareId={id} />
+    </ProtectedRoute>
   );
 }

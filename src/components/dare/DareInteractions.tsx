@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useInteractionStore } from "@/store/useInteractionStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/context/ToastContext";
+import { createReport } from "@/services/report.service";
 import Card from "@/components/ui/Card";
 import ReportModal from "@/components/moderation/ReportModal";
 
@@ -14,11 +16,21 @@ interface Props {
 
 export default function DareInteractions({ dareId }: Props) {
   const { t } = useLanguage();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, user } = useAuthStore();
   const { likes, liked, bookmarks, reported, toggleLike, toggleBookmark, reportDare } =
     useInteractionStore();
   const { showToast } = useToast();
   const [reportModalOpen, setReportModalOpen] = useState(false);
+
+  const { mutate: submitReport } = useMutation({
+    mutationFn: (payload: { reason: string }) =>
+      createReport({
+        reporterId: user!.id,
+        targetType: "DARE",
+        targetId: dareId,
+        reason: payload.reason,
+      }),
+  });
 
   const likeCount = likes[dareId] ?? 0;
   const isLiked = !!liked[dareId];
@@ -50,10 +62,13 @@ export default function DareInteractions({ dareId }: Props) {
   };
 
   const handleReportSubmit = (reason: string, details: string) => {
-    void reason; void details;
+    const fullReason = details ? `${reason}: ${details}` : reason;
     reportDare(dareId);
     setReportModalOpen(false);
     showToast(t.interactions.reportDone, "success");
+    if (user) {
+      submitReport({ reason: fullReason });
+    }
   };
 
   return (

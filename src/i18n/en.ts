@@ -93,6 +93,7 @@ const en = {
     successText: "Your dare is now live and waiting for takers.",
     postAnother: "Post Another",
     browseFeed: "Browse Feed",
+    postFailed: "Could not post your dare. Check your connection and try again.",
   },
   profile: {
     memberSince: "Member since",
@@ -210,8 +211,8 @@ const en = {
     haveAccount: "Already have an account?",
     signUpLink: "Sign up",
     signInLink: "Sign in",
-    demoNote: "Demo mode — any credentials work",
-    forgotPassword: "Forgot password?",
+    signInWithGoogle: "Continue with Google",
+    signUpWithGoogle: "Sign up with Google",
   },
   admin: {
     title: "Admin Dashboard",

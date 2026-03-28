@@ -2,16 +2,23 @@
 
 import { ReactNode } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
-
-const DEMO_ADMIN = { id: "admin-1", name: "Admin", email: "admin@dareme.com", role: "admin" as const };
 
 interface AdminRouteProps {
   children: ReactNode;
 }
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  const { isLoggedIn, user, login } = useAuthStore();
+  const { isLoggedIn, isLoading, user } = useAuthStore();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-24 text-center">
+        <div className="w-8 h-8 rounded-full border-2 border-violet-600 border-t-transparent animate-spin mx-auto" />
+      </div>
+    );
+  }
 
   if (!isLoggedIn || user?.role !== "admin") {
     return (
@@ -23,9 +30,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
         <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xs mx-auto">
           You need admin privileges to view this page.
         </p>
-        <Button size="lg" className="px-8" onClick={() => login(DEMO_ADMIN)}>
-          Login as Admin (Demo)
-        </Button>
+        <Link href="/login">
+          <Button size="lg" className="px-8">Sign In</Button>
+        </Link>
       </div>
     );
   }

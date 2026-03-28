@@ -4,10 +4,35 @@
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+/** Thrown when the API returns 4xx with express-validator `errors` array */
+export class ApiValidationError extends Error {
+  constructor(
+    message: string,
+    /** `path` from express-validator (e.g. title, description, creatorId) */
+    public readonly fieldErrors: Record<string, string>
+  ) {
+    super(message);
+    this.name = "ApiValidationError";
+  }
+}
+
+async function getAccessToken(): Promise<string | null> {
+  try {
+    const { createClient } = await import("@/lib/supabase");
+    const { data } = await createClient().auth.getSession();
+    return data.session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = await getAccessToken();
+
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
     ...options,
@@ -16,7 +41,27 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const json = await res.json();
 
   if (!res.ok) {
-    throw new Error(json.message || `API error: ${res.status}`);
+    const raw = Array.isArray(json.errors) ? json.errors : [];
+    const fieldErrors: Record<string, string> = {};
+    const messages: string[] = [];
+
+    for (const e of raw) {
+      if (e && typeof e.msg === "string") {
+        messages.push(e.msg);
+        if (typeof e.path === "string" && e.path.length > 0) {
+          fieldErrors[e.path] = e.msg;
+        }
+      }
+    }
+
+    const combined =
+      messages.length > 0 ? messages.join(" • ") : json.message || `API error: ${res.status}`;
+
+    if (messages.length > 0) {
+      throw new ApiValidationError(combined, fieldErrors);
+    }
+
+    throw new Error(combined);
   }
 
   return json.data as T;

@@ -12,7 +12,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isLoggedIn, user, logout } = useAuthStore();
+  const { isLoggedIn, user, signOut } = useAuthStore();
   const { t, locale, setLocale } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const userInitial = user?.name?.charAt(0).toUpperCase() ?? "?";
+  const userInitial = (user?.name ?? user?.email ?? "?").charAt(0).toUpperCase();
 
   return (
     <header
@@ -147,7 +147,7 @@ export default function Header() {
                   )}
                   <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
                   <button
-                    onClick={() => { logout(); setDropdownOpen(false); }}
+                    onClick={() => { signOut(); setDropdownOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <span>🚪</span> {t.nav.signOut}
@@ -244,7 +244,7 @@ export default function Header() {
                     🛡️ {t.admin.adminPanel}
                   </Link>
                 )}
-                <Button variant="outline" size="sm" className="w-full" onClick={() => { logout(); setMobileOpen(false); }}>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => { signOut(); setMobileOpen(false); }}>
                   {t.nav.signOut}
                 </Button>
               </>

@@ -6,15 +6,21 @@ import { useAuthStore } from "@/store/useAuthStore";
 import Button from "@/components/ui/Button";
 import { useLanguage } from "@/context/LanguageContext";
 
-const DEMO_USER = { id: "1", name: "Alex M.", email: "alex@example.com" };
-
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isLoggedIn, login } = useAuthStore();
+  const { isLoggedIn, isLoading } = useAuthStore();
   const { t } = useLanguage();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center">
+        <div className="w-8 h-8 rounded-full border-2 border-violet-600 border-t-transparent animate-spin mx-auto" />
+      </div>
+    );
+  }
 
   if (!isLoggedIn) {
     return (
@@ -28,9 +34,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
           <Link href="/login">
             <Button size="lg" className="px-8">{t.nav.signIn}</Button>
           </Link>
-          <Button size="lg" variant="outline" className="px-8" onClick={() => login(DEMO_USER)}>
-            {t.protected.signIn}
-          </Button>
         </div>
       </div>
     );
