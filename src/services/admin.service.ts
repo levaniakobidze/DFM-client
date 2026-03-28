@@ -1,8 +1,24 @@
-// Replace mock implementations with real API calls when backend is ready.
+import { api } from "@/lib/api";
 
-export type SubmissionStatus = "pending" | "approved" | "rejected";
-export type ReportStatus = "open" | "resolved" | "dismissed";
-export type DareStatus = "open" | "pending" | "completed" | "expired";
+// ── Shared ─────────────────────────────────────────────────────────────────
+
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+// ── Types ───────────────────────────────────────────────────────────────────
+
+export type SubmissionStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type ReportStatus = "OPEN" | "REVIEWED" | "DISMISSED";
+export type DareStatus = "DRAFT" | "ACTIVE" | "CLOSED" | "COMPLETED" | "REJECTED" | "CANCELLED";
+export type UserStatus = "ACTIVE" | "PAUSED" | "BLOCKED";
 
 export interface AdminStats {
   totalDares: number;
@@ -22,6 +38,7 @@ export interface AdminSubmission {
   status: SubmissionStatus;
   notes: string;
   reward: number;
+  proofUrl: string | null;
 }
 
 export interface AdminUser {
@@ -32,7 +49,8 @@ export interface AdminUser {
   daresCreated: number;
   daresCompleted: number;
   totalEarned: number;
-  role: "user" | "admin";
+  isAdmin: boolean;
+  status: UserStatus;
 }
 
 export interface AdminDare {
@@ -44,91 +62,173 @@ export interface AdminDare {
   createdBy: string;
   createdDate: string;
   submissions: number;
+  acceptances: number;
 }
 
 export interface AdminReport {
   id: string;
-  dareId: string;
-  dareTitle: string;
+  targetId: string;
+  targetType: string;
   reportedBy: string;
   reason: string;
   date: string;
   status: ReportStatus;
 }
 
-// ── Mock data ──────────────────────────────────────────────
+export interface AdminRequest {
+  id: string;
+  method: string;
+  path: string;
+  statusCode: number | null;
+  userId: string | null;
+  username: string | null;
+  ip: string | null;
+  userAgent: string | null;
+  duration: number | null;
+  createdAt: string;
+}
 
-const mockStats: AdminStats = {
-  totalDares: 8,
-  totalUsers: 124,
-  pendingSubmissions: 3,
-  openReports: 2,
-  totalRewardsPaid: 280,
-  activeThisWeek: 47,
-};
+// ── Paginated response wrappers ─────────────────────────────────────────────
 
-const mockSubmissions: AdminSubmission[] = [
-  { id: "s1", dareId: "1", dareTitle: "Eat a spoonful of hot sauce",      submittedBy: "Alex M.",   date: "Mar 26, 2026", status: "pending",  notes: "Completed in one take, no cheating!", reward: 15 },
-  { id: "s2", dareId: "2", dareTitle: "Compliment 5 strangers",           submittedBy: "Jordan K.", date: "Mar 25, 2026", status: "pending",  notes: "All 5 interactions recorded.",         reward: 30 },
-  { id: "s3", dareId: "3", dareTitle: "Draw a portrait in 60 seconds",    submittedBy: "Sam W.",    date: "Mar 24, 2026", status: "pending",  notes: "Timer visible throughout.",            reward: 10 },
-  { id: "s4", dareId: "4", dareTitle: "Sing a song in a coffee shop",     submittedBy: "Dana R.",   date: "Mar 22, 2026", status: "approved", notes: "Great performance, crowd loved it.",   reward: 50 },
-  { id: "s5", dareId: "5", dareTitle: "Do a 60-second product review",    submittedBy: "Chris P.",  date: "Mar 20, 2026", status: "rejected", notes: "Video was under 40 seconds.",          reward: 20 },
-  { id: "s6", dareId: "6", dareTitle: "Learn and perform a magic trick",  submittedBy: "Taylor M.", date: "Mar 18, 2026", status: "approved", notes: "Very convincing trick!",              reward: 25 },
-  { id: "s7", dareId: "7", dareTitle: "Start a conversation with a stranger", submittedBy: "Maria L.", date: "Mar 15, 2026", status: "approved", notes: "Had genuine 3-minute chat.", reward: 35 },
-];
+export interface AdminSubmissionsResponse { submissions: AdminSubmission[]; pagination: Pagination; }
+export interface AdminUsersResponse       { users: AdminUser[];             pagination: Pagination; }
+export interface AdminDaresResponse       { dares: AdminDare[];             pagination: Pagination; }
+export interface AdminReportsResponse     { reports: AdminReport[];         pagination: Pagination; }
+export interface AdminRequestsResponse    { requests: AdminRequest[];       pagination: Pagination; }
 
-const mockUsers: AdminUser[] = [
-  { id: "u1", name: "Alex M.",   email: "alex@example.com",   joinedDate: "Mar 1, 2026",  daresCreated: 3, daresCompleted: 4, totalEarned: 45,  role: "user"  },
-  { id: "u2", name: "Jordan K.", email: "jordan@example.com", joinedDate: "Mar 5, 2026",  daresCreated: 2, daresCompleted: 2, totalEarned: 30,  role: "user"  },
-  { id: "u3", name: "Sam W.",    email: "sam@example.com",    joinedDate: "Mar 10, 2026", daresCreated: 1, daresCompleted: 1, totalEarned: 15,  role: "user"  },
-  { id: "u4", name: "Dana R.",   email: "dana@example.com",   joinedDate: "Mar 12, 2026", daresCreated: 4, daresCompleted: 6, totalEarned: 80,  role: "user"  },
-  { id: "u5", name: "Chris P.",  email: "chris@example.com",  joinedDate: "Mar 15, 2026", daresCreated: 2, daresCompleted: 1, totalEarned: 20,  role: "user"  },
-  { id: "u6", name: "Maria L.",  email: "maria@example.com",  joinedDate: "Mar 18, 2026", daresCreated: 1, daresCompleted: 1, totalEarned: 35,  role: "user"  },
-  { id: "u7", name: "Taylor M.", email: "taylor@example.com", joinedDate: "Mar 20, 2026", daresCreated: 3, daresCompleted: 3, totalEarned: 60,  role: "user"  },
-  { id: "u8", name: "Jake R.",   email: "jake@example.com",   joinedDate: "Mar 22, 2026", daresCreated: 2, daresCompleted: 2, totalEarned: 30,  role: "user"  },
-  { id: "u9", name: "Admin",     email: "admin@dareme.com",   joinedDate: "Jan 1, 2026",  daresCreated: 0, daresCompleted: 0, totalEarned: 0,   role: "admin" },
-];
+// ── Mappers ─────────────────────────────────────────────────────────────────
 
-const mockDares: AdminDare[] = [
-  { id: "1", title: "Eat a spoonful of hot sauce",        category: "Fun",      reward: 15, status: "open",      createdBy: "Jake R.",   createdDate: "Mar 20, 2026", submissions: 1 },
-  { id: "2", title: "Compliment 5 strangers",             category: "Social",   reward: 30, status: "open",      createdBy: "Maria L.",  createdDate: "Mar 18, 2026", submissions: 2 },
-  { id: "3", title: "Draw a portrait in 60 seconds",      category: "Creative", reward: 10, status: "open",      createdBy: "Sam T.",    createdDate: "Mar 15, 2026", submissions: 1 },
-  { id: "4", title: "Sing a song in a coffee shop",       category: "Public",   reward: 50, status: "completed", createdBy: "Chris P.",  createdDate: "Mar 12, 2026", submissions: 3 },
-  { id: "5", title: "Do a 60-second product review",      category: "Video",    reward: 20, status: "open",      createdBy: "Taylor M.", createdDate: "Mar 10, 2026", submissions: 1 },
-  { id: "6", title: "Learn and perform a magic trick",    category: "Fun",      reward: 25, status: "completed", createdBy: "Jordan K.", createdDate: "Mar 8, 2026",  submissions: 2 },
-  { id: "7", title: "Start a conversation with a stranger", category: "Social", reward: 35, status: "open",      createdBy: "Alex M.",   createdDate: "Mar 5, 2026",  submissions: 2 },
-  { id: "8", title: "Paint something abstract in 10 mins", category: "Creative", reward: 15, status: "expired",  createdBy: "Dana W.",   createdDate: "Feb 28, 2026", submissions: 0 },
-];
+function mapSubmission(s: any): AdminSubmission {
+  return {
+    id: s.id,
+    dareId: s.dareId,
+    dareTitle: s.dare?.title ?? "—",
+    submittedBy: s.user?.username ?? "Unknown",
+    date: formatDate(s.createdAt),
+    status: s.status as SubmissionStatus,
+    notes: s.note ?? "",
+    reward: parseFloat(s.dare?.rewardAmount ?? "0"),
+    proofUrl: s.proofUrl ?? null,
+  };
+}
 
-const mockReports: AdminReport[] = [
-  { id: "r1", dareId: "1", dareTitle: "Eat a spoonful of hot sauce",  reportedBy: "Sam W.",    reason: "Could encourage dangerous behaviour for younger users.", date: "Mar 25, 2026", status: "open" },
-  { id: "r2", dareId: "4", dareTitle: "Sing a song in a coffee shop", reportedBy: "Taylor M.", reason: "Privacy concerns — bystanders visible in submission video.", date: "Mar 23, 2026", status: "open" },
-  { id: "r3", dareId: "2", dareTitle: "Compliment 5 strangers",       reportedBy: "Chris P.",  reason: "Submission contains inappropriate language.",               date: "Mar 18, 2026", status: "resolved" },
-];
+function mapUser(u: any): AdminUser {
+  return {
+    id: u.id,
+    name: u.username,
+    email: u.email,
+    joinedDate: formatDate(u.createdAt),
+    daresCreated: u.daresCreated ?? 0,
+    daresCompleted: u.daresCompleted ?? 0,
+    totalEarned: u.totalEarned ?? 0,
+    isAdmin: u.isAdmin ?? false,
+    status: (u.status ?? "ACTIVE") as UserStatus,
+  };
+}
 
-// ── Fetchers ───────────────────────────────────────────────
+function mapDare(d: any): AdminDare {
+  return {
+    id: d.id,
+    title: d.title,
+    category: d.category,
+    reward: parseFloat(d.rewardAmount ?? "0"),
+    status: d.status as DareStatus,
+    createdBy: d.creator?.username ?? "Unknown",
+    createdDate: formatDate(d.createdAt),
+    submissions: d._count?.submissions ?? 0,
+    acceptances: d._count?.acceptances ?? 0,
+  };
+}
+
+function mapReport(r: any): AdminReport {
+  return {
+    id: r.id,
+    targetId: r.targetId,
+    targetType: r.targetType,
+    reportedBy: r.reporter?.username ?? "Unknown",
+    reason: r.reason,
+    date: formatDate(r.createdAt),
+    status: r.status as ReportStatus,
+  };
+}
+
+// ── Fetch functions ──────────────────────────────────────────────────────────
 
 export async function fetchAdminStats(): Promise<AdminStats> {
-  await new Promise((r) => setTimeout(r, 400));
-  return mockStats;
+  return api.get<AdminStats>("/admin/stats");
 }
 
-export async function fetchAdminSubmissions(): Promise<AdminSubmission[]> {
-  await new Promise((r) => setTimeout(r, 500));
-  return mockSubmissions;
+export async function fetchAdminSubmissions(params: {
+  page?: number; status?: string;
+} = {}): Promise<AdminSubmissionsResponse> {
+  const qs = new URLSearchParams();
+  if (params.page) qs.set("page", String(params.page));
+  if (params.status) qs.set("status", params.status);
+  const raw = await api.get<any>(`/admin/submissions?${qs}`);
+  return { submissions: raw.submissions.map(mapSubmission), pagination: raw.pagination };
 }
 
-export async function fetchAdminUsers(): Promise<AdminUser[]> {
-  await new Promise((r) => setTimeout(r, 500));
-  return mockUsers;
+export async function fetchAdminUsers(params: {
+  page?: number; search?: string;
+} = {}): Promise<AdminUsersResponse> {
+  const qs = new URLSearchParams();
+  if (params.page) qs.set("page", String(params.page));
+  if (params.search) qs.set("search", params.search);
+  const raw = await api.get<any>(`/admin/users?${qs}`);
+  return { users: raw.users.map(mapUser), pagination: raw.pagination };
 }
 
-export async function fetchAdminDares(): Promise<AdminDare[]> {
-  await new Promise((r) => setTimeout(r, 400));
-  return mockDares;
+export async function fetchAdminDares(params: {
+  page?: number; status?: string; search?: string;
+} = {}): Promise<AdminDaresResponse> {
+  const qs = new URLSearchParams();
+  if (params.page) qs.set("page", String(params.page));
+  if (params.status) qs.set("status", params.status);
+  if (params.search) qs.set("search", params.search);
+  const raw = await api.get<any>(`/admin/dares?${qs}`);
+  return { dares: raw.dares.map(mapDare), pagination: raw.pagination };
 }
 
-export async function fetchAdminReports(): Promise<AdminReport[]> {
-  await new Promise((r) => setTimeout(r, 400));
-  return mockReports;
+export async function fetchAdminReports(params: {
+  page?: number; status?: string;
+} = {}): Promise<AdminReportsResponse> {
+  const qs = new URLSearchParams();
+  if (params.page) qs.set("page", String(params.page));
+  if (params.status) qs.set("status", params.status);
+  const raw = await api.get<any>(`/admin/reports?${qs}`);
+  return { reports: raw.reports.map(mapReport), pagination: raw.pagination };
+}
+
+export async function fetchAdminRequests(params: {
+  page?: number; method?: string; statusGroup?: string; search?: string;
+} = {}): Promise<AdminRequestsResponse> {
+  const qs = new URLSearchParams();
+  if (params.page) qs.set("page", String(params.page));
+  if (params.method) qs.set("method", params.method);
+  if (params.statusGroup) qs.set("statusGroup", params.statusGroup);
+  if (params.search) qs.set("search", params.search);
+  const raw = await api.get<any>(`/admin/requests?${qs}`);
+  return { requests: raw.requests, pagination: raw.pagination };
+}
+
+// ── Mutations ────────────────────────────────────────────────────────────────
+
+export async function updateAdminUserStatus(id: string, status: UserStatus) {
+  return api.patch(`/admin/users/${id}/status`, { status });
+}
+
+export async function deleteAdminUser(id: string) {
+  return api.delete(`/admin/users/${id}`);
+}
+
+export async function updateAdminSubmissionStatus(id: string, status: SubmissionStatus) {
+  return api.patch(`/admin/submissions/${id}/status`, { status });
+}
+
+export async function updateAdminDareStatus(id: string, status: DareStatus) {
+  return api.patch(`/admin/dares/${id}/status`, { status });
+}
+
+export async function updateAdminReportStatus(id: string, status: ReportStatus) {
+  return api.patch(`/admin/reports/${id}/status`, { status });
 }

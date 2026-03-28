@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useNotificationStore } from "@/store/useNotificationStore";
+import { useNotifications, useMarkAllRead } from "@/hooks/useNotifications";
 import { useLanguage } from "@/context/LanguageContext";
 import NotificationItem from "./NotificationItem";
 
@@ -10,16 +10,17 @@ export default function NotificationDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const { notifications, markAllRead } = useNotificationStore();
 
-  const unread = notifications.filter((n) => !n.read).length;
+  const { data } = useNotifications(1);
+  const markAllRead = useMarkAllRead();
+
+  const notifications = data?.notifications ?? [];
+  const unread = data?.unreadCount ?? 0;
   const preview = notifications.slice(0, 5);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -27,7 +28,6 @@ export default function NotificationDropdown() {
 
   return (
     <div className="relative" ref={ref}>
-      {/* Bell button */}
       <button
         onClick={() => setOpen((v) => !v)}
         className="relative p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -43,10 +43,8 @@ export default function NotificationDropdown() {
         )}
       </button>
 
-      {/* Dropdown panel */}
       {open && (
         <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl z-50 overflow-hidden">
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{t.notifications.title}</h3>
@@ -58,7 +56,7 @@ export default function NotificationDropdown() {
             </div>
             {unread > 0 && (
               <button
-                onClick={markAllRead}
+                onClick={() => markAllRead.mutate()}
                 className="text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 font-medium transition-colors"
               >
                 {t.notifications.markAllRead}
@@ -66,7 +64,6 @@ export default function NotificationDropdown() {
             )}
           </div>
 
-          {/* List */}
           {preview.length === 0 ? (
             <div className="py-12 px-4 text-center">
               <div className="text-3xl mb-2">🔔</div>
@@ -83,7 +80,6 @@ export default function NotificationDropdown() {
             </ul>
           )}
 
-          {/* Footer */}
           {notifications.length > 0 && (
             <div className="border-t border-gray-100 dark:border-gray-800">
               <Link

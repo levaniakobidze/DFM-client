@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import AccountStatusBanner from "@/components/layout/AccountStatusBanner";
 import { ToastProvider } from "@/context/ToastContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -67,6 +68,7 @@ export default function RootLayout({
               <AuthProvider>
                 <ToastProvider>
                   <Header />
+                  <AccountStatusBanner />
                   <main className="flex-1">{children}</main>
                   <Footer />
                 </ToastProvider>

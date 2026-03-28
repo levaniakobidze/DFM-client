@@ -20,7 +20,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     );
   }
 
-  if (!isLoggedIn || user?.role !== "admin") {
+  if (!isLoggedIn || user?.email !== "levaniakobidze25@gmail.com") {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 text-center">
         <div className="w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-3xl mx-auto mb-5">
