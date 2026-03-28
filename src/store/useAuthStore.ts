@@ -20,14 +20,21 @@ interface AuthState {
 }
 
 function toAuthUser(supabaseUser: User): AuthUser {
+  const meta = supabaseUser.user_metadata ?? {};
+  // Google sends `picture`; Supabase often normalizes to `avatar_url` — support both.
+  const avatarUrl =
+    (typeof meta.avatar_url === "string" && meta.avatar_url) ||
+    (typeof meta.picture === "string" && meta.picture) ||
+    null;
+
   return {
     id: supabaseUser.id,
     email: supabaseUser.email ?? "",
     name:
-      supabaseUser.user_metadata?.full_name ??
-      supabaseUser.email?.split("@")[0] ??
-      "User",
-    avatarUrl: supabaseUser.user_metadata?.avatar_url ?? null,
+      (typeof meta.full_name === "string" && meta.full_name) ||
+      (typeof meta.name === "string" && meta.name) ||
+      (supabaseUser.email?.split("@")[0] ?? "User"),
+    avatarUrl,
   };
 }
 

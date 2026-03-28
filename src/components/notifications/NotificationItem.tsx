@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Notification, NotificationType } from "@/services/notification.service";
 import { useMarkRead } from "@/hooks/useNotifications";
 import { useLanguage } from "@/context/LanguageContext";
+import { localizeNotificationBody, localizeNotificationRelativeTime } from "@/lib/notification-i18n";
 
 const typeConfig: Record<NotificationType, { icon: string; color: string; bg: string; darkBg: string }> = {
   DARE_ACCEPTED:       { icon: "🎯", color: "text-violet-600 dark:text-violet-400", bg: "bg-violet-100", darkBg: "dark:bg-violet-900/40" },
@@ -14,18 +15,6 @@ const typeConfig: Record<NotificationType, { icon: string; color: string; bg: st
   ACCOUNT_BLOCKED:     { icon: "🚫", color: "text-red-500 dark:text-red-400",       bg: "bg-red-100",    darkBg: "dark:bg-red-900/40"    },
   ACCOUNT_REACTIVATED: { icon: "✨", color: "text-green-600 dark:text-green-400",   bg: "bg-green-100",  darkBg: "dark:bg-green-900/40"  },
 };
-
-function relativeTime(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const m = Math.floor(diff / 60000);
-  if (m < 1)  return "just now";
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  if (d === 1) return "yesterday";
-  return `${d}d ago`;
-}
 
 interface Props {
   notification: Notification;
@@ -42,10 +31,28 @@ export default function NotificationItem({ notification, onClick }: Props) {
     SUBMISSION_APPROVED: t.notifications.submissionApproved,
     SUBMISSION_REJECTED: t.notifications.submissionRejected,
     REWARD_RECEIVED:     t.notifications.rewardReceived,
-    ACCOUNT_PAUSED:      "Account Paused",
-    ACCOUNT_BLOCKED:     "Account Blocked",
-    ACCOUNT_REACTIVATED: "Account Reactivated",
+    ACCOUNT_PAUSED:      t.notifications.accountPaused,
+    ACCOUNT_BLOCKED:     t.notifications.accountBlocked,
+    ACCOUNT_REACTIVATED: t.notifications.accountReactivated,
   };
+
+  const body = localizeNotificationBody(notification.type, notification.message, {
+    msgDareAccepted: t.notifications.msgDareAccepted,
+    msgSubmissionApproved: t.notifications.msgSubmissionApproved,
+    msgRewardReceived: t.notifications.msgRewardReceived,
+    msgSubmissionRejected: t.notifications.msgSubmissionRejected,
+    msgAccountBlocked: t.notifications.msgAccountBlocked,
+    msgAccountPaused: t.notifications.msgAccountPaused,
+    msgAccountReactivated: t.notifications.msgAccountReactivated,
+  });
+
+  const when = localizeNotificationRelativeTime(notification.createdAt, {
+    justNow: t.notifications.timeJustNow,
+    minutesAgo: t.notifications.timeMinutesAgo,
+    hoursAgo: t.notifications.timeHoursAgo,
+    yesterday: t.notifications.timeYesterday,
+    daysAgo: t.notifications.timeDaysAgo,
+  });
 
   const handleClick = () => {
     if (!notification.read) markRead.mutate(notification.id);
@@ -66,14 +73,14 @@ export default function NotificationItem({ notification, onClick }: Props) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
           <span className={`text-xs font-semibold ${cfg.color}`}>{typeLabel[notification.type]}</span>
-          <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">{relativeTime(notification.createdAt)}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">{when}</span>
         </div>
         <p className={`text-sm mt-0.5 line-clamp-2 leading-snug ${
           !notification.read
             ? "text-gray-900 dark:text-white font-medium"
             : "text-gray-600 dark:text-gray-400"
         }`}>
-          {notification.message}
+          {body}
         </p>
       </div>
       {!notification.read && (

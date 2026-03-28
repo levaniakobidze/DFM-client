@@ -36,7 +36,7 @@ export function useMyDares(page = 1) {
   });
 }
 
-export function useMyAcceptances(params: { page?: number; status?: string } = {}) {
+export function useMyAcceptances(params: { page?: number; status?: string; dareId?: string } = {}) {
   const { isLoggedIn } = useAuthStore();
   return useQuery({
     queryKey: ["profile", "acceptances", params],

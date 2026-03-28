@@ -86,7 +86,11 @@ export function useUpdateSubmissionStatus() {
       updateAdminSubmissionStatus(id, status),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "submissions"] });
+      qc.invalidateQueries({ queryKey: ["admin", "dares"] });
       qc.invalidateQueries({ queryKey: ["admin", "stats"] });
+      // Invalidate the public dare cache so the proof + completed status shows immediately
+      qc.invalidateQueries({ queryKey: ["dare"] });
+      qc.invalidateQueries({ queryKey: ["dares"] });
     },
   });
 }

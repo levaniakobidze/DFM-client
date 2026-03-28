@@ -10,6 +10,13 @@ interface BackendCreator {
   avatarUrl: string | null;
 }
 
+export interface ApprovedProof {
+  id: string;
+  proofUrl: string | null;
+  proofType: string;
+  user: BackendCreator;
+}
+
 interface BackendDare {
   id: string;
   title: string;
@@ -23,6 +30,7 @@ interface BackendDare {
   updatedAt: string;
   creator: BackendCreator;
   _count?: { acceptances: number; submissions?: number };
+  approvedProof?: ApprovedProof | null;
 }
 
 interface BackendFeedResponse {
@@ -81,6 +89,14 @@ function toFrontendDare(b: BackendDare): Dare {
     status: STATUS_FROM_BACKEND[b.status] ?? "open",
     proofRequirement: PROOF_TYPE_LABEL[b.proofType] ?? "Submit proof of completion.",
     createdBy: b.creator?.username ?? "Unknown",
+    approvedProof: b.approvedProof
+      ? {
+          id: b.approvedProof.id,
+          proofUrl: b.approvedProof.proofUrl,
+          proofType: b.approvedProof.proofType,
+          completedBy: b.approvedProof.user.username,
+        }
+      : null,
   };
 }
 

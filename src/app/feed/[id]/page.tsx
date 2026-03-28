@@ -55,6 +55,7 @@ export default function DareDetailsPage({ params }: Props) {
 
   const isFlagged = !!reported[id];
   const submissionStatus = submissionStatuses[id];
+  const isCompleted = dare?.status === "completed";
 
   if (isLoading) {
     return (
@@ -122,31 +123,65 @@ export default function DareDetailsPage({ params }: Props) {
         <SubmissionStatusBanner status={submissionStatus} dareId={dare.id} />
       )}
 
+      {/* Completed proof — shown when dare is done */}
+      {isCompleted && dare.approvedProof && (
+        <Card className="mb-4 border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">✅</span>
+            <p className="font-semibold text-green-800 dark:text-green-400">Dare Completed</p>
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
+              by <span className="font-medium text-gray-700 dark:text-gray-300">@{dare.approvedProof.completedBy}</span>
+            </span>
+          </div>
+          {dare.approvedProof.proofUrl && (
+            dare.approvedProof.proofType === "VIDEO" ? (
+              <video
+                src={dare.approvedProof.proofUrl}
+                controls
+                className="w-full rounded-xl max-h-80 bg-black"
+                preload="metadata"
+              />
+            ) : (
+              <img
+                src={dare.approvedProof.proofUrl}
+                alt="Approved proof"
+                className="w-full rounded-xl max-h-80 object-contain bg-gray-100 dark:bg-gray-800"
+              />
+            )
+          )}
+        </Card>
+      )}
+
       {/* Action — hide if already submitted */}
       {!submissionStatus && (
         <Card className="mb-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-gray-900 dark:text-white">{t.dareDetails.readyTitle}</p>
+              <p className="font-semibold text-gray-900 dark:text-white">
+                {isCompleted ? "This dare has been completed" : t.dareDetails.readyTitle}
+              </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}
+                {isCompleted
+                  ? "Someone already completed this dare. You can still view the proof below."
+                  : <>{t.dareDetails.earn} <span className="text-amber-500 font-semibold">${dare.reward.toFixed(2)}</span> {t.dareDetails.onCompletion}</>
+                }
               </p>
             </div>
             {isLoggedIn ? (
               <Button
                 size="lg"
                 onClick={handleAcceptDare}
-                disabled={isAccepting || accepted.includes(id)}
+                disabled={isAccepting || accepted.includes(id) || isCompleted}
               >
-                {isAccepting ? "Accepting..." : accepted.includes(id) ? "Accepted" : t.dareDetails.acceptDare}
+                {isAccepting ? "Accepting..." : isCompleted ? "Completed" : accepted.includes(id) ? "Accepted" : t.dareDetails.acceptDare}
               </Button>
             ) : (
               <Link href="/login">
-                <Button size="lg">{t.dareDetails.acceptDare}</Button>
+                <Button size="lg" disabled={isCompleted}>{isCompleted ? "Completed" : t.dareDetails.acceptDare}</Button>
               </Link>
             )}
           </div>
-          {!isLoggedIn && (
+          {!isLoggedIn && !isCompleted && (
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-right">
               <Link href="/login" className="text-violet-600 hover:underline font-medium">{t.nav.signIn}</Link>
               {" "}{t.protected.desc.toLowerCase()}

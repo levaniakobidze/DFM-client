@@ -11,6 +11,8 @@ import { useToast } from "@/context/ToastContext";
 import { DareCategory } from "@/lib/mock-data";
 import { useLanguage } from "@/context/LanguageContext";
 import { ApiValidationError } from "@/lib/api";
+import { interpolate } from "@/lib/notification-i18n";
+import { createCheckout } from "@/services/payment.service";
 
 const categories: DareCategory[] = ["Fun", "Social", "Creative", "Video", "Public"];
 
@@ -45,8 +47,13 @@ function CreateDareForm() {
   const { showToast } = useToast();
   const { mutate: createDare, isPending } = useCreateDare();
   const [selectedCategory, setSelectedCategory] = useState<DareCategory | "">("");
-  const [submitted, setSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [pendingPayment, setPendingPayment] = useState<{
+    dareId: string;
+    amount: number;
+    title: string;
+  } | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   function clearFieldError(key: string) {
     setFieldErrors((prev) => {
@@ -65,16 +72,62 @@ function CreateDareForm() {
     Public: t.landing.categoryLabels.Public,
   };
 
-  if (submitted) {
+  async function handlePayNow() {
+    if (!pendingPayment) return;
+    setIsCheckingOut(true);
+    try {
+      const returnUrl = `${window.location.origin}/feed/${pendingPayment.dareId}`;
+      const { checkoutUrl } = await createCheckout(pendingPayment.dareId, pendingPayment.amount, returnUrl);
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        showToast(t.createDare.checkoutOpenFailed, "error");
+        setIsCheckingOut(false);
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : t.createDare.checkoutFailed;
+      showToast(msg, "error");
+      setIsCheckingOut(false);
+    }
+  }
+
+  if (pendingPayment) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <div className="text-4xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.createDare.successTitle}</h2>
-        <p className="text-gray-500 dark:text-gray-400 mb-6">{t.createDare.successText}</p>
-        <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => setSubmitted(false)}>{t.createDare.postAnother}</Button>
-          <Link href="/feed"><Button>{t.createDare.browseFeed}</Button></Link>
+      <div className="max-w-xl mx-auto px-4 py-20">
+        <div className="text-center mb-8">
+          <div className="text-4xl mb-4">🎯</div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.createDare.fundingTitle}</h2>
+          <p className="text-gray-500 dark:text-gray-400">{t.createDare.fundingSubtitle}</p>
         </div>
+
+        <Card className="mb-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-gray-400 tracking-wide mb-1">{t.createDare.labelYourDare}</p>
+              <p className="font-semibold text-gray-900 dark:text-white truncate">{pendingPayment.title}</p>
+            </div>
+            <div className="shrink-0 text-right">
+              <p className="text-xs font-semibold text-gray-400 tracking-wide mb-1">{t.createDare.labelReward}</p>
+              <p className="text-2xl font-bold text-amber-500">${pendingPayment.amount.toFixed(2)}</p>
+            </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+            <p>✓ {t.createDare.fundingBullet1}</p>
+            <p>✓ {t.createDare.fundingBullet2}</p>
+          </div>
+        </Card>
+
+        <Button size="lg" className="w-full" onClick={handlePayNow} disabled={isCheckingOut}>
+          {isCheckingOut
+            ? t.createDare.redirectingToPayment
+            : interpolate(t.createDare.payToFund, {
+                amount: `$${pendingPayment.amount.toFixed(2)}`,
+              })}
+        </Button>
+
+        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+          {t.createDare.secureCheckoutPaddle}
+        </p>
       </div>
     );
   }
@@ -98,9 +151,8 @@ function CreateDareForm() {
         proofRequirement: data.get("proofRequirement") as string,
       },
       {
-        onSuccess: () => {
-          showToast(t.createDare.successTitle);
-          setSubmitted(true);
+        onSuccess: (dare) => {
+          setPendingPayment({ dareId: dare.id, amount: dare.reward, title: dare.title });
         },
         onError: (error) => {
           if (error instanceof ApiValidationError) {
@@ -226,7 +278,7 @@ function CreateDareForm() {
         </Card>
 
         <Button type="submit" size="lg" className="w-full" disabled={isPending}>
-          {isPending ? t.createDare.submitting : t.createDare.submit}
+          {isPending ? t.createDare.submitting : t.createDare.continueToPayment}
         </Button>
       </form>
     </div>

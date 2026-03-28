@@ -18,11 +18,17 @@ export default function DareCard({ dare }: DareCardProps) {
   const { reported } = useInteractionStore();
   const isFlagged = !!reported[dare.id];
 
+  const categoryLabel =
+    t.landing.categoryLabels[dare.category as keyof typeof t.landing.categoryLabels] ?? dare.category;
+
   return (
     <Card hover className="flex flex-col">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="category">{dare.category}</Badge>
+          <Badge variant="category">{categoryLabel}</Badge>
+          {dare.status === "completed" && <Badge variant="success">{t.profile.completed}</Badge>}
+          {dare.status === "pending" && <Badge variant="pending">{t.moderation.underReview}</Badge>}
+          {dare.status === "expired" && <Badge variant="danger">{t.admin.statusExpired}</Badge>}
           {isFlagged && <ModerationBadge status="flagged" />}
         </div>
         <span className="text-xl font-extrabold text-amber-500 leading-none shrink-0">${dare.reward.toFixed(2)}</span>
@@ -32,7 +38,9 @@ export default function DareCard({ dare }: DareCardProps) {
       <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
         <span className="text-xs text-gray-400 dark:text-gray-500">by {dare.createdBy}</span>
         <Link href={`/feed/${dare.id}`}>
-          <Button size="sm">{t.landing.view}</Button>
+          <Button size="sm" variant={dare.status === "completed" ? "outline" : "primary"}>
+            {dare.status === "completed" ? t.feed.viewProof : t.landing.view}
+          </Button>
         </Link>
       </div>
     </Card>

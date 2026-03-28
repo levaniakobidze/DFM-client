@@ -46,6 +46,22 @@ export default function Header() {
 
   const userInitial = (user?.name ?? user?.email ?? "?").charAt(0).toUpperCase();
 
+  const avatarEl = (sizeClass: string, textClass: string) =>
+    user?.avatarUrl ? (
+      <img
+        src={user.avatarUrl}
+        alt=""
+        className={`${sizeClass} rounded-full object-cover shrink-0 bg-gray-200 dark:bg-gray-700`}
+        referrerPolicy="no-referrer"
+      />
+    ) : (
+      <span
+        className={`${sizeClass} rounded-full bg-violet-600 text-white font-bold flex items-center justify-center shrink-0 ${textClass}`}
+      >
+        {userInitial}
+      </span>
+    );
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -59,7 +75,7 @@ export default function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className={`font-bold text-violet-600 tracking-tight shrink-0 transition-all duration-300 ${
+          className={`cursor-pointer font-bold text-violet-600 tracking-tight shrink-0 transition-all duration-300 ${
             isScrolled ? "text-3xl" : "text-2xl"
           }`}
         >
@@ -69,7 +85,7 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-400">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">
+            <Link key={link.href} href={link.href} className="cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">
               {link.label}
             </Link>
           ))}
@@ -79,8 +95,9 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-2">
           {/* Dark mode toggle */}
           <button
+            type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="cursor-pointer p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label="Toggle dark mode"
           >
             {isDark ? (
@@ -99,8 +116,9 @@ export default function Header() {
 
           {/* Language toggle */}
           <button
+            type="button"
             onClick={toggleLocale}
-            className="px-2.5 py-1 text-xs font-bold border border-gray-200 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400 transition-colors"
+            className="cursor-pointer px-2.5 py-1 text-xs font-bold border border-gray-200 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400 transition-colors"
           >
             {locale === "en" ? "KA" : "EN"}
           </button>
@@ -108,12 +126,11 @@ export default function Header() {
           {isLoggedIn ? (
             <div className="relative" ref={dropdownRef}>
               <button
+                type="button"
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-gray-200 dark:border-gray-600 hover:border-violet-400 dark:hover:border-violet-500 transition-colors"
+                className="cursor-pointer flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-gray-200 dark:border-gray-600 hover:border-violet-400 dark:hover:border-violet-500 transition-colors"
               >
-                <span className="w-7 h-7 rounded-full bg-violet-600 text-white text-xs font-bold flex items-center justify-center">
-                  {userInitial}
-                </span>
+                {avatarEl("w-7 h-7", "text-xs")}
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user?.name}</span>
                 <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -125,14 +142,14 @@ export default function Header() {
                   <Link
                     href="/profile"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <span>👤</span> {t.nav.profile}
                   </Link>
                   <Link
                     href="/wallet"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <span>💳</span> {t.nav.wallet}
                   </Link>
@@ -140,15 +157,16 @@ export default function Header() {
                     <Link
                       href="/admin"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
+                      className="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
                     >
                       <span>🛡️</span> {t.admin.adminPanel}
                     </Link>
                   )}
                   <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
                   <button
+                    type="button"
                     onClick={() => { signOut(); setDropdownOpen(false); }}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    className="cursor-pointer w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <span>🚪</span> {t.nav.signOut}
                   </button>
@@ -170,8 +188,9 @@ export default function Header() {
         {/* Mobile right: dark toggle + lang toggle + hamburger */}
         <div className="md:hidden flex items-center gap-2">
           <button
+            type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="cursor-pointer p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label="Toggle dark mode"
           >
             {isDark ? (
@@ -185,13 +204,15 @@ export default function Header() {
             )}
           </button>
           <button
+            type="button"
             onClick={toggleLocale}
-            className="px-2.5 py-1 text-xs font-bold border border-gray-200 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-violet-400 hover:text-violet-600 transition-colors"
+            className="cursor-pointer px-2.5 py-1 text-xs font-bold border border-gray-200 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-violet-400 hover:text-violet-600 transition-colors"
           >
             {locale === "en" ? "KA" : "EN"}
           </button>
           <button
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            type="button"
+            className="cursor-pointer p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -211,7 +232,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+              className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
               onClick={() => setMobileOpen(false)}
             >
               {link.label}
@@ -221,26 +242,24 @@ export default function Header() {
             {isLoggedIn ? (
               <>
                 <div className="flex items-center gap-2.5 py-1">
-                  <span className="w-8 h-8 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
-                    {userInitial}
-                  </span>
+                  {avatarEl("w-8 h-8", "text-sm")}
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">{user?.name}</p>
                 </div>
                 <Link href="/profile" onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                   {t.nav.profile}
                 </Link>
                 <Link href="/wallet" onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                   {t.nav.wallet}
                 </Link>
                 <Link href="/notifications" onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                   {t.nav.notifications}
                 </Link>
                 {user?.role === "admin" && (
                   <Link href="/admin" onClick={() => setMobileOpen(false)}
-                    className="text-sm font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors">
+                    className="cursor-pointer text-sm font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors">
                     🛡️ {t.admin.adminPanel}
                   </Link>
                 )}

@@ -1,6 +1,13 @@
 export type DareCategory = "Fun" | "Social" | "Creative" | "Video" | "Public";
 export type DareStatus = "open" | "pending" | "completed" | "expired";
 
+export interface DareApprovedProof {
+  id: string;
+  proofUrl: string | null;
+  proofType: string;
+  completedBy: string; // username
+}
+
 export interface Dare {
   id: string;
   title: string;
@@ -10,6 +17,7 @@ export interface Dare {
   status: DareStatus;
   proofRequirement: string;
   createdBy: string;
+  approvedProof?: DareApprovedProof | null;
 }
 
 export const mockDares: Dare[] = [
